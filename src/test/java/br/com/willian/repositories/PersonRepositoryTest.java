@@ -56,4 +56,25 @@ class PersonRepositoryTest {
 		assertEquals(2, personList.size(), () -> "Should contain 2 persons on list.");
 		
 	}
+	
+	@DisplayName("Given Person Object When Find By Id Then Return Person Object")
+	@Test
+	void testGivenPersonObject_WhenFindById_ThenReturnPersonObject() {
+		//Given / Arrange
+		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
+		repository.save(person0);
+		
+		//When / Act
+		Person savedPerson = repository.findById(person0.getId()).get();
+		
+		//Then / Assert
+		assertNotNull(savedPerson, () -> "Shoud not return null.");
+		assertTrue(savedPerson.getId() > 0, () -> "Should not return Id less than 0.");
+		assertEquals(person0.getId(), savedPerson.getId(), () -> "Ids should be the sabe.");
+		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the sabe.");
+		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the sabe.");
+		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the sabe.");
+		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the sabe.");
+		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the sabe.");
+	}
 }
