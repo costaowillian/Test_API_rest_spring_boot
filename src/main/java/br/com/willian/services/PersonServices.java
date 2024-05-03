@@ -46,6 +46,7 @@ public class PersonServices {
 		entity.setLastName(person.getLastName());
 		entity.setAdress(person.getAdress());
 		entity.setGender(person.getGender());
+		entity.setEmail(person.getEmail());
 		
 		return repository.save(person);
 	}

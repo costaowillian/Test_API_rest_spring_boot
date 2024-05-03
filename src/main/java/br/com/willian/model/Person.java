@@ -32,9 +32,29 @@ public class Person implements Serializable {
 	@Column(nullable = false, length = 6)
 	private String gender;
 	
+	@Column(nullable = false, length = 100)
+	private String email;
+	
 	public Person() {
 	}
-	
+		
+	public Person(Long id, String firstName, String lastName, String adress, String gender, String email) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.adress = adress;
+		this.gender = gender;
+		this.email = email;
+	}
+
+	public Person(String firstName, String lastName, String adress, String gender, String email) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.adress = adress;
+		this.gender = gender;
+		this.email = email;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -75,6 +95,14 @@ public class Person implements Serializable {
 		this.gender = gender;
 	}
 	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(adress, firstName, gender, id, lastName);

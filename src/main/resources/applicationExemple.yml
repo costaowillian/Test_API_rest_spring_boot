@@ -4,9 +4,9 @@ spring:
   
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/rest_with_sprint_boot_willian?useTimezone=true&serverTimezone=UTC
-    username: root
-    password: admin123
+    url: jdbc:{DatabaseURl}
+    username: {DatabaseUserName}
+    password: {DatabasePassword}
   jpa:
     hibernate:
       ddl-auto: update
