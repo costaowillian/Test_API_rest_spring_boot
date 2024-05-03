@@ -1,6 +1,10 @@
 package br.com.willian.repositories;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,11 +30,30 @@ class PersonRepositoryTest {
 		
 		//Then / Assert
 		assertNotNull(savedPerson, () -> "Shoud not return null.");
-		assertTrue(savedPerson.getId() > 0, () -> "Shoud not return Id less than 0.");
+		assertTrue(savedPerson.getId() > 0, () -> "Should not return Id less than 0.");
 		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the sabe.");
 		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the sabe.");
 		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the sabe.");
 		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the sabe.");
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the sabe.");
+	}
+	
+	@DisplayName("Given Person List When Find All Then Return Person List")
+	@Test
+	void testGivenPersonList_WhenFindAll_ThenReturnPersonList() {
+		//Given / Arrange
+		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
+		Person person1 = new Person("Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com");
+		
+		repository.save(person0);
+		repository.save(person1);
+		
+		//When / Act
+		List<Person> personList = repository.findAll();
+		
+		//Then / Assert
+		assertNotNull(personList, () -> "Shoud not return null.");
+		assertEquals(2, personList.size(), () -> "Should contain 2 persons on list.");
+		
 	}
 }
