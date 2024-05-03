@@ -194,7 +194,7 @@ target
 dependency-reduced-pom.xml
 *.sublime-*
 /scratch
-.gradle
+.gradles
 README.html
 *.iml
 .idea
@@ -202,4 +202,3 @@ README.html
 .mvn
 mvnw
 mvnw.cmd
-application.yml
