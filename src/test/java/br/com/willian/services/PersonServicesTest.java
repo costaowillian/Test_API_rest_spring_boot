@@ -9,6 +9,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -67,11 +68,28 @@ public class PersonServicesTest {
 		DuplicateResourceException exception = assertThrows(DuplicateResourceException.class, () -> {
 			services.createPerson(person0);
 		},
-		() -> "Duplicate E-mail should have cause an DuplicateResourceException!");
+		() -> "Duplicate E-mail should have cause an DuplicateResourceException!"
+		);	
 		
 		//Then /Assert
 		verify(repository, never()).save(any(Person.class));
 		assertEquals(expectedMessage, exception.getMessage(), "Exception message is incorrect");
+	}
+	
+	@DisplayName("Test Given Person List When Find All Persons Shoud Return Persons List")
+	@Test
+	void testGivenPersonList_WhenFindAllPersons_ShoudReturnPersonsList() {
+		//Given / Arrange
+		Person person1 = new Person("Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com");
 		
+		when(repository.findAll()).thenReturn(List.of(person0, person1));		
+		
+		
+		//When / Act
+		List<Person> personsList = services.findAll();
+		
+		//Then /Assert
+		assertNotNull(personsList, () -> "Should not return a empty list!");
+		assertEquals(2, personsList.size(), () -> "Persons List should have 2 Persons object!");
 	}
 }
