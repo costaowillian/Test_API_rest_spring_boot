@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -97,7 +98,7 @@ class PersonRepositoryTest {
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
-	@DisplayName("Given Person Object When Update Perso Then Return Updated Person Object")
+	@DisplayName("Given Person Object When Update Person Then Return Updated Person Object")
 	@Test
 	void testGivenPersonObject_WhenUpdatePerson_ThenReturnUpdatedPersonObject() {
 		//Given / Arrange
@@ -116,6 +117,22 @@ class PersonRepositoryTest {
 		assertEquals(person0.getId(), savedPerson.getId(), () -> "Ids should be the same.");
 		assertEquals("Leonardo", updatedPerosn.getFirstName(), () -> "FirstName should be the same.");
 		assertEquals("leonardo@gmail.com", updatedPerosn.getEmail(), () -> "Email should be the same.");
+	}
+	
+	@DisplayName("Given Person Object When Delete Then Remove Person")
+	@Test
+	void testGivenPersonObject_WhenDelete_ThenRemovePerson() {
+		//Given / Arrange
+		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
+		repository.save(person0);
+		
+		//When / Act
+		repository.deleteById(person0.getId());
+		
+		Optional<Person> personOptional = repository.findById(person0.getId());
+		
+		//Then / Assert
+		assertTrue(personOptional.isEmpty());
 	}
 	
 	
