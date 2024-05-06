@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -108,5 +109,19 @@ public class PersonServicesTest {
 		//Then /Assert
 		assertTrue(personsList.isEmpty(), () -> "Person List should have empty");
 		assertEquals(0, personsList.size(), () -> "Persons List should have 0 Persons object!");
+	}
+	
+	@DisplayName("test Given Person Id When Find By Id Shoud Return Person Object")
+	@Test
+	void testGivenPersonId_WhenFindById_ShoudReturnPersonObject() {
+		//Given / Arrange
+		when(repository.findById(anyLong())).thenReturn(Optional.of(person0));
+		
+		//When / Act
+		Person savedPerson = services.findById(1L);
+		
+		//Then /Assert
+		assertNotNull(savedPerson, () -> "Should not return null");
+		assertEquals("Willian", savedPerson.getFirstName(), () -> "Shoul return the same firstsNames");
 	}
 }
