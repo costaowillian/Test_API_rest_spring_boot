@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -144,5 +146,20 @@ public class PersonServicesTest {
 		assertNotNull(updatedPerson, () -> "Should not return null");
 		assertEquals("leonardo", updatedPerson.getFirstName(), () -> "Shoul return the same firstsNames");
 		assertEquals("leonardo@gmail.com", updatedPerson.getEmail(), () -> "Shoul return the same email");
+	}
+	
+	@DisplayName("test Given Person Id When delete Person Shoud Do Nothing")
+	@Test
+	void testGivenPersonOId_WhendeletePerson_ShoudDoNothing() {
+		//Given / Arrange
+		person0.setId(1L);
+		when(repository.findById(anyLong())).thenReturn(Optional.of(person0));
+		willDoNothing().given(repository).delete(person0);	
+		
+		//When / Act
+		services.deletePerson(person0.getId());
+		
+		//Then /Assert
+		verify(repository, times(1)).delete(person0);
 	}
 }
