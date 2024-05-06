@@ -20,15 +20,22 @@ class PersonRepositoryTest {
 	
 	@Autowired
 	private PersonRepository repository;
+	
+	Person person0;
+	
+	@BeforeEach
+	void setup(){
+		person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
+		repository.save(person0);
+	}
 		
 	@DisplayName("Given Person Object When Save Then Return Saved Person")
 	@Test
 	void testGivenPersonObject_WhenSave_ThenReturnSavedPerson() {
 		//Given / Arrange
-		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
 		
 		//When / Act
-		Person savedPerson = repository.save(person0);
+		Person savedPerson = person0;
 		
 		//Then / Assert
 		assertNotNull(savedPerson, () -> "Shoud not return null.");
@@ -44,10 +51,8 @@ class PersonRepositoryTest {
 	@Test
 	void testGivenPersonList_WhenFindAll_ThenReturnPersonList() {
 		//Given / Arrange
-		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
 		Person person1 = new Person("Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com");
 		
-		repository.save(person0);
 		repository.save(person1);
 		
 		//When / Act
@@ -62,8 +67,6 @@ class PersonRepositoryTest {
 	@Test
 	void testGivenPersonObject_WhenFindById_ThenReturnPersonObject() {
 		//Given / Arrange
-		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
-		repository.save(person0);
 		
 		//When / Act
 		Person savedPerson = repository.findById(person0.getId()).get();
@@ -83,8 +86,6 @@ class PersonRepositoryTest {
 	@Test
 	void testGivenPersonObject_WhenFindByEmail_ThenReturnPersonObject() {
 		//Given / Arrange
-		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
-		repository.save(person0);
 		
 		//When / Act
 		Person savedPerson = repository.findByEmail(person0.getEmail()).get();
@@ -103,8 +104,6 @@ class PersonRepositoryTest {
 	@Test
 	void testGivenPersonObject_WhenUpdatePerson_ThenReturnUpdatedPersonObject() {
 		//Given / Arrange
-		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
-		repository.save(person0);
 		
 		//When / Act
 		Person savedPerson = repository.findById(person0.getId()).get();
@@ -124,8 +123,6 @@ class PersonRepositoryTest {
 	@Test
 	void testGivenPersonObject_WhenDelete_ThenRemovePerson() {
 		//Given / Arrange
-		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
-		repository.save(person0);
 		
 		//When / Act
 		repository.deleteById(person0.getId());
@@ -140,8 +137,6 @@ class PersonRepositoryTest {
 	@Test
 	void testGivenFirstNameAndLastName_WhenFindByJPQL_ThenReturnPersonObject() {
 		//Given / Arrange
-		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
-		repository.save(person0);
 		
 		//When / Act
 		Person savedPerson = repository.findByJPQL("Willian","Costa");
