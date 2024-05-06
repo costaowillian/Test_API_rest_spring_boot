@@ -66,7 +66,8 @@ public class PersonServicesTest {
 		//When / Act
 		DuplicateResourceException exception = assertThrows(DuplicateResourceException.class, () -> {
 			services.createPerson(person0);
-		});
+		},
+		() -> "Duplicate E-mail should have cause an DuplicateResourceException!");
 		
 		//Then /Assert
 		verify(repository, never()).save(any(Person.class));
