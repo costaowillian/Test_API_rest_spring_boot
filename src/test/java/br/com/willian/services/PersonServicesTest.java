@@ -3,12 +3,14 @@ package br.com.willian.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,5 +93,20 @@ public class PersonServicesTest {
 		//Then /Assert
 		assertNotNull(personsList, () -> "Should not return a empty list!");
 		assertEquals(2, personsList.size(), () -> "Persons List should have 2 Persons object!");
+	}
+	
+	@DisplayName("Test Given Empty Person List When Find All Persons Shoud Return Empty Persons List")
+	@Test
+	void testGivenEmptyPersonList_WhenFindAllPersons_ShoudReturnEmptyPersonsList() {
+		//Given / Arrange	
+		when(repository.findAll()).thenReturn(Collections.EMPTY_LIST);		
+		
+		
+		//When / Act
+		List<Person> personsList = services.findAll();
+		
+		//Then /Assert
+		assertTrue(personsList.isEmpty(), () -> "Person List should have empty");
+		assertEquals(0, personsList.size(), () -> "Persons List should have 0 Persons object!");
 	}
 }
