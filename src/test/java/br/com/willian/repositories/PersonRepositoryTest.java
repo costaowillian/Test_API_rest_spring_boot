@@ -150,5 +150,22 @@ class PersonRepositoryTest {
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
+	@DisplayName("Given First Name And Last Name When Find JPQL Named Then Return Person Object")
+	@Test
+	void testGivenFirstNameAndLastName_WhenFindJPQLNamed_ThenReturnPersonObject() {
+		//Given / Arrange
+		
+		//When / Act
+		Person savedPerson = repository.findByJPQLNamedParameters("Willian","Costa");
+		
+		//Then / Assert
+		assertNotNull(savedPerson, () -> "Shoud not return null.");
+		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the same.");
+		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the same.");
+		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the same.");
+		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the same.");
+		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
+	}
+	
 	
 }
