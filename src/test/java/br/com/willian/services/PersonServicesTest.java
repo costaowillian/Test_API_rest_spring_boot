@@ -124,4 +124,25 @@ public class PersonServicesTest {
 		assertNotNull(savedPerson, () -> "Should not return null");
 		assertEquals("Willian", savedPerson.getFirstName(), () -> "Shoul return the same firstsNames");
 	}
+	
+	@DisplayName("test Given Person Object When Update Person Shoud Return Updated Person Object")
+	@Test
+	void testGivenPersonObject_WhenUpdatePerson_ShoudReturnUpdatedPersonObject() {
+		//Given / Arrange
+		person0.setId(1L);
+		when(repository.findById(anyLong())).thenReturn(Optional.of(person0));
+		
+		person0.setEmail("leonardo@gmail.com");
+		person0.setFirstName("leonardo");		
+		
+		when(repository.save(person0)).thenReturn(person0);
+		
+		//When / Act
+		Person updatedPerson = services.updatePerson(person0);
+		
+		//Then /Assert
+		assertNotNull(updatedPerson, () -> "Should not return null");
+		assertEquals("leonardo", updatedPerson.getFirstName(), () -> "Shoul return the same firstsNames");
+		assertEquals("leonardo@gmail.com", updatedPerson.getEmail(), () -> "Shoul return the same email");
+	}
 }
