@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ class PersonRepositoryTest {
 	
 	@Autowired
 	private PersonRepository repository;
-	
+		
 	@DisplayName("Given Person Object When Save Then Return Saved Person")
 	@Test
 	void testGivenPersonObject_WhenSave_ThenReturnSavedPerson() {
@@ -133,6 +134,25 @@ class PersonRepositoryTest {
 		
 		//Then / Assert
 		assertTrue(personOptional.isEmpty());
+	}
+	
+	@DisplayName("Given First Name And Last Name When Find By JPQL Then Return Person Object")
+	@Test
+	void testGivenFirstNameAndLastName_WhenFindByJPQL_ThenReturnPersonObject() {
+		//Given / Arrange
+		Person person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
+		repository.save(person0);
+		
+		//When / Act
+		Person savedPerson = repository.findByJPQL("Willian","Costa");
+		
+		//Then / Assert
+		assertNotNull(savedPerson, () -> "Shoud not return null.");
+		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the same.");
+		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the same.");
+		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the same.");
+		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the same.");
+		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
 	
