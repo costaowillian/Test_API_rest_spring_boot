@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.willian.exceptions.DuplicateResourceException;
 import br.com.willian.exceptions.ResourceNotFoundException;
 import br.com.willian.model.Person;
 import br.com.willian.repositories.PersonRepository;
@@ -37,7 +38,7 @@ public class PersonServices {
 		Optional<Person> savedPerson = repository.findByEmail(person.getEmail());
 		
 		if(savedPerson.isPresent()) {
-			throw new ResourceNotFoundException("Person already exist with given e-mail: " + person.getEmail());
+			throw new DuplicateResourceException("Person already exist with given e-mail: " + person.getEmail());
 		}
 				
 		return repository.save(person);
