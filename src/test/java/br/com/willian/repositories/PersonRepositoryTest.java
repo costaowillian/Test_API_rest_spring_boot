@@ -21,10 +21,11 @@ class PersonRepositoryTest {
 	@Autowired
 	private PersonRepository repository;
 	
-	Person person0;
+	private Person person0;
 	
 	@BeforeEach
 	void setup(){
+		//Given / Arrange
 		person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
 		repository.save(person0);
 	}
