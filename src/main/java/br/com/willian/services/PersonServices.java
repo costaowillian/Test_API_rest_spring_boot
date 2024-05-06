@@ -1,12 +1,11 @@
 package br.com.willian.services;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.ArrayList;
 
 import br.com.willian.exceptions.ResourceNotFoundException;
 import br.com.willian.model.Person;
@@ -34,6 +33,12 @@ public class PersonServices {
 	
 	public Person createPerson(Person person) {
 		logger.info("Creating one person...");
+		
+		Optional<Person> savedPerson = repository.findByEmail(person.getEmail());
+		
+		if(savedPerson.isPresent()) {
+			throw new ResourceNotFoundException("Person already exist with given e-mail: " + person.getEmail());
+		}
 				
 		return repository.save(person);
 	}
