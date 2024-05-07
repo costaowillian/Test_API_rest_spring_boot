@@ -142,5 +142,26 @@ class PersonControllerTest {
 				.andExpect(jsonPath("$.email", is(updatedPerson.getEmail())));
 	}
 	
-
+	@DisplayName("Test Given Unexistent Update Person When Update Shoud Return Not Found")
+	@Test
+	void testGivenUnexistentPerson_WhenUpdate_ShoudReturnNotFound() throws JsonProcessingException, Exception {
+		
+		//Given / Arrange
+		long personId = 1L;
+		when(services.findById(personId)).thenThrow(ResourceNotFoundException.class);
+		
+		when(services.updatePerson(any(Person.class))).thenAnswer((invocation) -> invocation.getArgument(1));
+		
+		Person updatedPerson = new Person(1L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com");
+		
+		//When / Act
+		ResultActions response =  mockMvc.perform(put("/person")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(updatedPerson)));
+		
+		//Then /Assert
+		response.andExpect(status().isNotFound())
+			.andDo(print());
+	}
+	
 }
