@@ -3,10 +3,14 @@ package br.com.willian.controllers;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -59,6 +63,25 @@ class PersonControllerTest {
 				.andExpect(jsonPath("$.firstName", is(person0.getFirstName())))
 				.andExpect(jsonPath("$.lastName", is(person0.getLastName())))
 				.andExpect(jsonPath("$.email", is(person0.getEmail())));
+	}
+	
+	@DisplayName("Test Given Person List Of Persons When Find All Shoud Return Persons List")
+	@Test
+	void testGivenListOfPersons_WhenFindAll_ShoudReturnPersonsList() throws JsonProcessingException, Exception {
+		//Given / Arrange
+		List<Person> persons = new ArrayList<>();
+		persons.add(person0);
+		persons.add(new Person(2L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com"));
+		
+		when(services.findAll()).thenReturn(persons);
+		
+		//When / Act
+		ResultActions response =  mockMvc.perform(get("/person"));
+		
+		//Then /Assert
+		response.andExpect(status().isOk())
+		.andDo(print())
+				.andExpect(jsonPath("$.size()", is(persons.size())));
 	}
 	
 
