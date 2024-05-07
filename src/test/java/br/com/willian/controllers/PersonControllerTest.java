@@ -2,7 +2,9 @@ package br.com.willian.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -142,7 +144,7 @@ class PersonControllerTest {
 				.andExpect(jsonPath("$.email", is(updatedPerson.getEmail())));
 	}
 	
-	@DisplayName("Test Given Unexistent Update Person When Update Shoud Return Not Found")
+	@DisplayName("Test Given Unexistent Person When Update Shoud Return Not Found")
 	@Test
 	void testGivenUnexistentPerson_WhenUpdate_ShoudReturnNotFound() throws JsonProcessingException, Exception {
 		
@@ -161,6 +163,22 @@ class PersonControllerTest {
 		
 		//Then /Assert
 		response.andExpect(status().isNotFound())
+			.andDo(print());
+	}
+	
+	@DisplayName("Test Given Person Id When Delete Shoud Return Null Content")
+	@Test
+	void testGivenPersonID_WhenDelete_ShoudReturnNullContent() throws JsonProcessingException, Exception {
+		
+		//Given / Arrange
+		long personId = 1L;
+		willDoNothing().given(services).deletePerson(personId);
+		
+		//When / Act
+		ResultActions response =  mockMvc.perform(delete("/person/{id}", personId));
+		
+		//Then /Assert
+		response.andExpect(status().isNoContent())
 			.andDo(print());
 	}
 	
