@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -116,6 +117,29 @@ class PersonControllerTest {
 		//Then /Assert
 		response.andExpect(status().isNotFound())
 				.andDo(print());
+	}
+	
+	@DisplayName("Test Given Update Person When Update Shoud Return Updated Person Object")
+	@Test
+	void testGivenUpdatePerson_WhenUpdate_ShoudReturnUpdatedPersonObject() throws JsonProcessingException, Exception {
+		//Given / Arrange
+		long personId = 1L;
+		when(services.findById(personId)).thenReturn(person0);
+		when(services.updatePerson(any(Person.class))).thenAnswer((invocation) -> invocation.getArgument(0));
+		
+		Person updatedPerson = new Person(1L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com");
+		
+		//When / Act
+		ResultActions response =  mockMvc.perform(put("/person")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(updatedPerson)));
+		
+		//Then /Assert
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.firstName", is(updatedPerson.getFirstName())))
+				.andExpect(jsonPath("$.lastName", is(updatedPerson.getLastName())))
+				.andExpect(jsonPath("$.email", is(updatedPerson.getEmail())));
 	}
 	
 
