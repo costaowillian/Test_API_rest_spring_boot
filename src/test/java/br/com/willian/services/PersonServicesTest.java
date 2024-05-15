@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.willian.dtos.PersonDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,34 +45,34 @@ public class PersonServicesTest {
 	@BeforeEach
 	void setup(){
 		//Given / Arrange
-		person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
+		person0 = new Person(1L,"Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
 	}
 	
-	@DisplayName("test Given Person Object When Save Person Shoud Return Person Object")
+	@DisplayName("test Given Person Object When Save Person Should Return Person Object")
 	@Test
-	void testGivenPersonObject_WhenSavePerson_ShoudReturnPersonObject() {
+	void testGivenPersonObject_WhenSavePerson_ShouldReturnPersonObject() {
 		//Given / Arrange
 		when(repository.findByEmail(anyString())).thenReturn(Optional.empty());	
-		when(repository.save(person0)).thenReturn(person0);	
+		when(repository.save(person0)).thenReturn(person0);
 		
 		//When / Act
-		Person savedPerson = services.createPerson(person0);
+		PersonDTO savedPerson = services.createPerson(new PersonDTO(person0));
 		
 		//Then /Assert
 		assertNotNull(savedPerson, () -> "Should not return null");
-		assertEquals("Willian", savedPerson.getFirstName(), () -> "Shoul return the same firstsNames");
+		assertEquals("Willian", savedPerson.getFirstName(), () -> "Should return the same firstsNames");
 	}
 	
-	@DisplayName("test Given ExistingEmail When Save Person Shoud Return Throw Exception")
+	@DisplayName("test Given ExistingEmail When Save Person Should Return Throw Exception")
 	@Test
-	void testGivenExistingEmail_WhenSavePerson_ShoudThrowException() {
+	void testGivenExistingEmail_WhenSavePerson_ShouldThrowException() {
 		//Given / Arrange
 		when(repository.findByEmail(anyString())).thenReturn(Optional.of(person0));		
 		String expectedMessage = "Person already exist with given e-mail: " + person0.getEmail();
 		
 		//When / Act
 		DuplicateResourceException exception = assertThrows(DuplicateResourceException.class, () -> {
-			services.createPerson(person0);
+			services.createPerson(new PersonDTO(person0));
 		},
 		() -> "Duplicate E-mail should have cause an DuplicateResourceException!"
 		);	
@@ -81,9 +82,9 @@ public class PersonServicesTest {
 		assertEquals(expectedMessage, exception.getMessage(), "Exception message is incorrect");
 	}
 	
-	@DisplayName("Test Given Person List When Find All Persons Shoud Return Persons List")
+	@DisplayName("Test Given Person List When Find All Persons Should Return Persons List")
 	@Test
-	void testGivenPersonList_WhenFindAllPersons_ShoudReturnPersonsList() {
+	void testGivenPersonList_WhenFindAllPersons_ShouldReturnPersonsList() {
 		//Given / Arrange
 		Person person1 = new Person("Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com");
 		
@@ -100,7 +101,7 @@ public class PersonServicesTest {
 	
 	@DisplayName("Test Given Empty Person List When Find All Persons Shoud Return Empty Persons List")
 	@Test
-	void testGivenEmptyPersonList_WhenFindAllPersons_ShoudReturnEmptyPersonsList() {
+	void testGivenEmptyPersonList_WhenFindAllPersons_ShouldReturnEmptyPersonsList() {
 		//Given / Arrange	
 		when(repository.findAll()).thenReturn(Collections.EMPTY_LIST);		
 		
@@ -113,9 +114,9 @@ public class PersonServicesTest {
 		assertEquals(0, personsList.size(), () -> "Persons List should have 0 Persons object!");
 	}
 	
-	@DisplayName("test Given Person Id When Find By Id Shoud Return Person Object")
+	@DisplayName("test Given Person Id When Find By Id Should Return Person Object")
 	@Test
-	void testGivenPersonId_WhenFindById_ShoudReturnPersonObject() {
+	void testGivenPersonId_WhenFindById_ShouldReturnPersonObject() {
 		//Given / Arrange
 		when(repository.findById(anyLong())).thenReturn(Optional.of(person0));
 		
@@ -124,12 +125,12 @@ public class PersonServicesTest {
 		
 		//Then /Assert
 		assertNotNull(savedPerson, () -> "Should not return null");
-		assertEquals("Willian", savedPerson.getFirstName(), () -> "Shoul return the same firstsNames");
+		assertEquals("Willian", savedPerson.getFirstName(), () -> "Should return the same firstsNames");
 	}
 	
-	@DisplayName("test Given Person Object When Update Person Shoud Return Updated Person Object")
+	@DisplayName("test Given Person Object When Update Person Should Return Updated Person Object")
 	@Test
-	void testGivenPersonObject_WhenUpdatePerson_ShoudReturnUpdatedPersonObject() {
+	void testGivenPersonObject_WhenUpdatePerson_ShouldReturnUpdatedPersonObject() {
 		//Given / Arrange
 		person0.setId(1L);
 		when(repository.findById(anyLong())).thenReturn(Optional.of(person0));
@@ -140,17 +141,17 @@ public class PersonServicesTest {
 		when(repository.save(person0)).thenReturn(person0);
 		
 		//When / Act
-		Person updatedPerson = services.updatePerson(person0);
+		PersonDTO updatedPerson = services.updatePerson(new PersonDTO(person0));
 		
 		//Then /Assert
 		assertNotNull(updatedPerson, () -> "Should not return null");
-		assertEquals("leonardo", updatedPerson.getFirstName(), () -> "Shoul return the same firstsNames");
-		assertEquals("leonardo@gmail.com", updatedPerson.getEmail(), () -> "Shoul return the same email");
+		assertEquals("leonardo", updatedPerson.getFirstName(), () -> "Should return the same firstsNames");
+		assertEquals("leonardo@gmail.com", updatedPerson.getEmail(), () -> "Should return the same email");
 	}
 	
 	@DisplayName("test Given Person Id When delete Person Shoud Do Nothing")
 	@Test
-	void testGivenPersonOId_WhendeletePerson_ShoudDoNothing() {
+	void testGivenPersonOId_WhenDeletePerson_ShouldDoNothing() {
 		//Given / Arrange
 		person0.setId(1L);
 		when(repository.findById(anyLong())).thenReturn(Optional.of(person0));

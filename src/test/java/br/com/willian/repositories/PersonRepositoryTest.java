@@ -44,7 +44,7 @@ class PersonRepositoryTest {
 		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the same.");
 		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the same.");
 		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the same.");
-		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the same.");
+		assertEquals(person0.getAddress(), savedPerson.getAddress(), () -> "Adress should be the same.");
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
@@ -79,7 +79,7 @@ class PersonRepositoryTest {
 		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the same.");
 		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the same.");
 		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the same.");
-		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the same.");
+		assertEquals(person0.getAddress(), savedPerson.getAddress(), () -> "Adress should be the same.");
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
@@ -97,7 +97,7 @@ class PersonRepositoryTest {
 		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the same.");
 		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the same.");
 		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the same.");
-		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the same.");
+		assertEquals(person0.getAddress(), savedPerson.getAddress(), () -> "Adress should be the same.");
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
@@ -111,13 +111,13 @@ class PersonRepositoryTest {
 		savedPerson.setFirstName("Leonardo");
 		savedPerson.setEmail("leonardo@gmail.com");
 		
-		Person updatedPerosn = repository.save(savedPerson);
+		Person updatedPerson = repository.save(savedPerson);
 		
 		//Then / Assert
-		assertNotNull(updatedPerosn, () -> "Shoud not return null.");
+		assertNotNull(updatedPerson, () -> "Shoud not return null.");
 		assertEquals(person0.getId(), savedPerson.getId(), () -> "Ids should be the same.");
-		assertEquals("Leonardo", updatedPerosn.getFirstName(), () -> "FirstName should be the same.");
-		assertEquals("leonardo@gmail.com", updatedPerosn.getEmail(), () -> "Email should be the same.");
+		assertEquals("Leonardo", updatedPerson.getFirstName(), () -> "FirstName should be the same.");
+		assertEquals("leonardo@gmail.com", updatedPerson.getEmail(), () -> "Email should be the same.");
 	}
 	
 	@DisplayName("Given Person Object When Delete Then Remove Person")
@@ -143,11 +143,11 @@ class PersonRepositoryTest {
 		Person savedPerson = repository.findByJPQL("Willian","Costa");
 		
 		//Then / Assert
-		assertNotNull(savedPerson, () -> "Shoud not return null.");
+		assertNotNull(savedPerson, () -> "Should not return null.");
 		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the same.");
 		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the same.");
 		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the same.");
-		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the same.");
+		assertEquals(person0.getAddress(), savedPerson.getAddress(), () -> "Address should be the same.");
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
@@ -160,11 +160,11 @@ class PersonRepositoryTest {
 		Person savedPerson = repository.findByJPQLNamedParameters("Willian","Costa");
 		
 		//Then / Assert
-		assertNotNull(savedPerson, () -> "Shoud not return null.");
+		assertNotNull(savedPerson, () -> "Should not return null.");
 		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the same.");
 		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the same.");
 		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the same.");
-		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the same.");
+		assertEquals(person0.getAddress(), savedPerson.getAddress(), () -> "Address should be the same.");
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
@@ -177,11 +177,11 @@ class PersonRepositoryTest {
 		Person savedPerson = repository.findByByNativeSQLNamedParameters("Willian","Costa");
 		
 		//Then / Assert
-		assertNotNull(savedPerson, () -> "Shoud not return null.");
+		assertNotNull(savedPerson, () -> "Should not return null.");
 		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the same.");
 		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the same.");
 		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the same.");
-		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the same.");
+		assertEquals(person0.getAddress(), savedPerson.getAddress(), () -> "Address should be the same.");
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
@@ -194,11 +194,11 @@ class PersonRepositoryTest {
 		Person savedPerson = repository.findByNativeSQL("Willian","Costa");
 		
 		//Then / Assert
-		assertNotNull(savedPerson, () -> "Shoud not return null.");
+		assertNotNull(savedPerson, () -> "Should not return null.");
 		assertEquals(person0.getFirstName(), savedPerson.getFirstName(), () -> "FirstName should be the same.");
 		assertEquals(person0.getLastName(), savedPerson.getLastName(), () -> "LastName should be the same.");
 		assertEquals(person0.getEmail(), savedPerson.getEmail(), () -> "Email should be the same.");
-		assertEquals(person0.getAdress(), savedPerson.getAdress(), () -> "Adress should be the same.");
+		assertEquals(person0.getAddress(), savedPerson.getAddress(), () -> "Address should be the same.");
 		assertEquals(person0.getGender(), savedPerson.getGender(), () -> "Gender should be the same.");
 	}
 	
