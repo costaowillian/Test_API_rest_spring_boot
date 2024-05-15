@@ -65,8 +65,8 @@ class PersonControllerTest {
 		
 		//Then /Assert
 		response.andDo(print()).andExpect(status().isCreated())
-				.andExpect(jsonPath("$.firstName", is(person0.getFirstName())))
-				.andExpect(jsonPath("$.lastName", is(person0.getLastName())))
+				.andExpect(jsonPath("$.first_name", is(person0.getFirstName())))
+				.andExpect(jsonPath("$.last_name", is(person0.getLastName())))
 				.andExpect(jsonPath("$.email", is(person0.getEmail())));
 	}
 	
@@ -91,7 +91,7 @@ class PersonControllerTest {
 	
 	@DisplayName("Test Given Person Id When Find By Id Should Return Person Object")
 	@Test
-	void testGivenPersonId_WhenFindById_ShoudReturnPersonObject() throws JsonProcessingException, Exception {
+	void testGivenPersonId_WhenFindById_ShouldReturnPersonObject() throws JsonProcessingException, Exception {
 		//Given / Arrange
 		long personId = 1L;
 		when(services.findById(personId)).thenReturn(person0);
@@ -102,14 +102,14 @@ class PersonControllerTest {
 		//Then /Assert
 		response.andExpect(status().isOk())
 				.andDo(print())
-				.andExpect(jsonPath("$.firstName", is(person0.getFirstName())))
-				.andExpect(jsonPath("$.lastName", is(person0.getLastName())))
+				.andExpect(jsonPath("$.first_name", is(person0.getFirstName())))
+				.andExpect(jsonPath("$.last_name", is(person0.getLastName())))
 				.andExpect(jsonPath("$.email", is(person0.getEmail())));
 	}
 	
 	@DisplayName("Test Given Invalid Person Id When Find By Id Should Return Not Found")
 	@Test
-	void testGivenInvalidPersonId_WhenFindById_ShoudReturnNotFound() throws JsonProcessingException, Exception {
+	void testGivenInvalidPersonId_WhenFindById_ShouldWSSdReturnNotFound() throws JsonProcessingException, Exception {
 		//Given / Arrange
 		long personId = 1L;
 		when(services.findById(personId)).thenThrow(ResourceNotFoundException.class);
@@ -140,8 +140,8 @@ class PersonControllerTest {
 		//Then /Assert
 		response.andExpect(status().isOk())
 				.andDo(print())
-				.andExpect(jsonPath("$.firstName", is(updatedPerson.getFirstName())))
-				.andExpect(jsonPath("$.lastName", is(updatedPerson.getLastName())))
+				.andExpect(jsonPath("$.first_name", is(updatedPerson.getFirstName())))
+				.andExpect(jsonPath("$.last_name", is(updatedPerson.getLastName())))
 				.andExpect(jsonPath("$.email", is(updatedPerson.getEmail())));
 	}
 	
