@@ -20,7 +20,7 @@ public class PersonController {
 	@Autowired
 	private PersonServices service;
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<List<PersonDTO>> findAll() {
 		try {
 			List<Person> list = service.findAll();
@@ -32,7 +32,7 @@ public class PersonController {
 	}	
 	
 	@GetMapping(value = "/{id}",
-			produces = MediaType.APPLICATION_JSON_VALUE)
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<PersonDTO> findById(@PathVariable(value = "id") Long id) throws Exception{
 		try {
 			Person obj = service.findById(id);
@@ -42,8 +42,8 @@ public class PersonController {
 		}
 	}
 	
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<PersonDTO> create(@RequestBody PersonDTO person) throws Exception{
 		person = service.createPerson(person);
 
@@ -53,8 +53,8 @@ public class PersonController {
 		return ResponseEntity.created(uri).body(person);
 	}
 	
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<PersonDTO> update(@RequestBody PersonDTO person) throws Exception{
 		try {
 			return ResponseEntity.ok(service.updatePerson(person));	
