@@ -1,16 +1,9 @@
 spring:
   application:
     name: primeiro_projeto_API
-  
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/rest_with_sprint_boot_willian?useTimezone=true&serverTimezone=UTC
-    username: root
-    password: admin123
+
+  profiles:
+    active: dev
+
   jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: false
+    open-in-view: false
