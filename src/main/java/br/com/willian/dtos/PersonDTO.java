@@ -1,6 +1,9 @@
 package br.com.willian.dtos;
 
 import br.com.willian.model.Person;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,14 +11,23 @@ import jakarta.persistence.Id;
 
 import java.io.Serializable;
 
+@JsonPropertyOrder({
+        "id", "first_name", "last_name", "email", "gender", "Address",
+})
 public class PersonDTO implements Serializable  {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
+
+    @JsonProperty("first_name")
     private String firstName;
+
+    @JsonProperty("last_name")
     private String lastName;
     private String address;
+
+    @JsonIgnore
     private String gender;
     private String email;
 
