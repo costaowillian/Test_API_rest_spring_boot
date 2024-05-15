@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import br.com.willian.dtos.PersonDTO;
+import br.com.willian.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import br.com.willian.model.Person;
@@ -20,7 +20,7 @@ public class PersonController {
 	@Autowired
 	private PersonServices service;
 
-	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public ResponseEntity<List<PersonDTO>> findAll() {
 		try {
 			List<Person> list = service.findAll();
@@ -32,7 +32,7 @@ public class PersonController {
 	}	
 	
 	@GetMapping(value = "/{id}",
-			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+			produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public ResponseEntity<PersonDTO> findById(@PathVariable(value = "id") Long id) throws Exception{
 		try {
 			Person obj = service.findById(id);
@@ -42,8 +42,8 @@ public class PersonController {
 		}
 	}
 	
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@PostMapping(consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML},
+			produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public ResponseEntity<PersonDTO> create(@RequestBody PersonDTO person) throws Exception{
 		person = service.createPerson(person);
 
@@ -53,8 +53,8 @@ public class PersonController {
 		return ResponseEntity.created(uri).body(person);
 	}
 	
-	@PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@PutMapping(consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML},
+			produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public ResponseEntity<PersonDTO> update(@RequestBody PersonDTO person) throws Exception{
 		try {
 			return ResponseEntity.ok(service.updatePerson(person));	
