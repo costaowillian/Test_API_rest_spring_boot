@@ -14,7 +14,7 @@ import br.com.willian.services.PersonServices;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/v1/person")
 public class PersonController {
 	
 	@Autowired
