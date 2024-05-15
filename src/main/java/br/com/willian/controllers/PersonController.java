@@ -21,7 +21,7 @@ public class PersonController {
 	private PersonServices service;
 
 	@GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public ResponseEntity<List<PersonDTO>> findAll() {
+	public ResponseEntity<List<PersonDTO>> findAll() throws Exception{
 		try {
 			List<Person> list = service.findAll();
 			List<PersonDTO> listDto = list.stream().map(x -> new PersonDTO(x)).collect(Collectors.toList());
@@ -57,7 +57,7 @@ public class PersonController {
 			produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public ResponseEntity<PersonDTO> update(@RequestBody PersonDTO person) throws Exception{
 		try {
-			return ResponseEntity.ok(service.updatePerson(person));	
+			return ResponseEntity.ok(service.updatePerson(person));
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}

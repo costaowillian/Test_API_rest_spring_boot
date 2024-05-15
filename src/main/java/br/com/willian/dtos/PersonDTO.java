@@ -31,6 +31,8 @@ public class PersonDTO implements Serializable  {
     private String gender;
     private String email;
 
+    public PersonDTO() {}
+
     public PersonDTO(Person person) {
         this.id = person.getId();
         this.firstName = person.getFirstName();

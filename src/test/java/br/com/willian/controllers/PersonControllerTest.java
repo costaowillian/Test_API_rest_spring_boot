@@ -53,26 +53,26 @@ class PersonControllerTest {
 		person0 = new Person(1L, "Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
 	}
 	
-	@DisplayName("Test Given Person Object When Create Person Shoud Return Saved Person")
+	@DisplayName("Test Given Person Object When Create Person Should Return Saved Person")
 	@Test
-	void testGivenPersonObject_WhenCreatePerson_ShoudReturnSavedPerson() throws JsonProcessingException, Exception {
+	void testGivenPersonObject_WhenCreatePerson_ShouldReturnSavedPerson() throws JsonProcessingException, Exception {
 		//Given / Arrange
 		when(services.createPerson(any(PersonDTO.class))).thenAnswer((invocation) -> invocation.getArgument(0));
 		
 		//When / Act
-		ResultActions response =  mockMvc.perform(post("/person").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(person0)));
+		ResultActions response =  mockMvc.perform(post("/api/v1/person").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(new PersonDTO(person0))));
 		
 		//Then /Assert
-		response.andDo(print()).andExpect(status().isOk())
+		response.andDo(print()).andExpect(status().isCreated())
 				.andExpect(jsonPath("$.firstName", is(person0.getFirstName())))
 				.andExpect(jsonPath("$.lastName", is(person0.getLastName())))
 				.andExpect(jsonPath("$.email", is(person0.getEmail())));
 	}
 	
-	@DisplayName("Test Given Person List Of Persons When Find All Shoud Return Persons List")
+	@DisplayName("Test Given Person List Of Persons When Find All Should Return Persons List")
 	@Test
-	void testGivenListOfPersons_WhenFindAll_ShoudReturnPersonsList() throws JsonProcessingException, Exception {
+	void testGivenListOfPersons_WhenFindAll_ShouldReturnPersonsList() throws JsonProcessingException, Exception {
 		//Given / Arrange
 		List<Person> persons = new ArrayList<>();
 		persons.add(person0);
@@ -81,7 +81,7 @@ class PersonControllerTest {
 		when(services.findAll()).thenReturn(persons);
 		
 		//When / Act
-		ResultActions response =  mockMvc.perform(get("/person"));
+		ResultActions response =  mockMvc.perform(get("/api/v1/person"));
 		
 		//Then /Assert
 		response.andExpect(status().isOk())
@@ -89,7 +89,7 @@ class PersonControllerTest {
 				.andExpect(jsonPath("$.size()", is(persons.size())));
 	}
 	
-	@DisplayName("Test Given Person Id When Find By Id Shoud Return Person Object")
+	@DisplayName("Test Given Person Id When Find By Id Should Return Person Object")
 	@Test
 	void testGivenPersonId_WhenFindById_ShoudReturnPersonObject() throws JsonProcessingException, Exception {
 		//Given / Arrange
@@ -97,7 +97,7 @@ class PersonControllerTest {
 		when(services.findById(personId)).thenReturn(person0);
 		
 		//When / Act
-		ResultActions response =  mockMvc.perform(get("/person/{id}", personId));
+		ResultActions response =  mockMvc.perform(get("/api/v1/person/{id}", personId));
 		
 		//Then /Assert
 		response.andExpect(status().isOk())
@@ -107,7 +107,7 @@ class PersonControllerTest {
 				.andExpect(jsonPath("$.email", is(person0.getEmail())));
 	}
 	
-	@DisplayName("Test Given Invalid Person Id When Find By Id Shoud Return Not Found")
+	@DisplayName("Test Given Invalid Person Id When Find By Id Should Return Not Found")
 	@Test
 	void testGivenInvalidPersonId_WhenFindById_ShoudReturnNotFound() throws JsonProcessingException, Exception {
 		//Given / Arrange
@@ -115,25 +115,25 @@ class PersonControllerTest {
 		when(services.findById(personId)).thenThrow(ResourceNotFoundException.class);
 		
 		//When / Act
-		ResultActions response =  mockMvc.perform(get("/person/{id}", personId));
+		ResultActions response =  mockMvc.perform(get("/api/v1/person/{id}", personId));
 		
 		//Then /Assert
 		response.andExpect(status().isNotFound())
 				.andDo(print());
 	}
 	
-	@DisplayName("Test Given Update Person When Update Shoud Return Updated Person Object")
+	@DisplayName("Test Given Update Person When Update Should Return Updated Person Object")
 	@Test
-	void testGivenUpdatePerson_WhenUpdate_ShoudReturnUpdatedPersonObject() throws JsonProcessingException, Exception {
+	void testGivenUpdatePerson_WhenUpdate_ShouldReturnUpdatedPersonObject() throws JsonProcessingException, Exception {
 		//Given / Arrange
 		long personId = 1L;
 		when(services.findById(personId)).thenReturn(person0);
 		when(services.updatePerson(any(PersonDTO.class))).thenAnswer((invocation) -> invocation.getArgument(0));
 		
-		Person updatedPerson = new Person(1L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com");
+		PersonDTO updatedPerson = new PersonDTO(person0);
 		
 		//When / Act
-		ResultActions response =  mockMvc.perform(put("/person")
+		ResultActions response =  mockMvc.perform(put("/api/v1/person")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(updatedPerson)));
 		
@@ -145,9 +145,9 @@ class PersonControllerTest {
 				.andExpect(jsonPath("$.email", is(updatedPerson.getEmail())));
 	}
 	
-	@DisplayName("Test Given Unexistent Person When Update Shoud Return Not Found")
+	@DisplayName("Test Given Nonexistent Person When Update Should Return Not Found")
 	@Test
-	void testGivenUnexistentPerson_WhenUpdate_ShoudReturnNotFound() throws JsonProcessingException, Exception {
+	void testGivenNonexistentPerson_WhenUpdate_ShouldReturnNotFound() throws JsonProcessingException, Exception {
 		
 		//Given / Arrange
 		long personId = 1L;
@@ -158,7 +158,7 @@ class PersonControllerTest {
 		Person updatedPerson = new Person(1L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com");
 		
 		//When / Act
-		ResultActions response =  mockMvc.perform(put("/person")
+		ResultActions response =  mockMvc.perform(put("/api/v1/person")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(updatedPerson)));
 		
@@ -167,17 +167,17 @@ class PersonControllerTest {
 			.andDo(print());
 	}
 	
-	@DisplayName("Test Given Person Id When Delete Shoud Return Null Content")
+	@DisplayName("Test Given Person Id When Delete Should Return Null Content")
 	@Test
-	void testGivenPersonID_WhenDelete_ShoudReturnNullContent() throws JsonProcessingException, Exception {
+	void testGivenPersonID_WhenDelete_ShouldReturnNullContent() throws JsonProcessingException, Exception {
 		
 		//Given / Arrange
 		long personId = 1L;
 		willDoNothing().given(services).deletePerson(personId);
 		
 		//When / Act
-		ResultActions response =  mockMvc.perform(delete("/person/{id}", personId));
-		
+		ResultActions response =  mockMvc.perform(delete("/api/v1/person/{id}", personId));
+
 		//Then /Assert
 		response.andExpect(status().isNoContent())
 			.andDo(print());
