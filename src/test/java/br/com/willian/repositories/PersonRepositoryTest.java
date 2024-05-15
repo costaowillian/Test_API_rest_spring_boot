@@ -68,7 +68,6 @@ class PersonRepositoryTest {
 	@Test
 	void testGivenPersonObject_WhenFindById_ThenReturnPersonObject() {
 		//Given / Arrange
-		person0.setId(1L);
 
 		//When / Act
 		Person savedPerson = repository.findById(person0.getId()).get();
