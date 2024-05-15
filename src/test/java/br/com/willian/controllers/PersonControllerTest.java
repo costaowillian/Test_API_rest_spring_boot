@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.willian.dtos.PersonDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,7 @@ class PersonControllerTest {
 	@Test
 	void testGivenPersonObject_WhenCreatePerson_ShoudReturnSavedPerson() throws JsonProcessingException, Exception {
 		//Given / Arrange
-		when(services.createPerson(any(Person.class))).thenAnswer((invocation) -> invocation.getArgument(0));
+		when(services.createPerson(any(PersonDTO.class))).thenAnswer((invocation) -> invocation.getArgument(0));
 		
 		//When / Act
 		ResultActions response =  mockMvc.perform(post("/person").contentType(MediaType.APPLICATION_JSON)
@@ -127,7 +128,7 @@ class PersonControllerTest {
 		//Given / Arrange
 		long personId = 1L;
 		when(services.findById(personId)).thenReturn(person0);
-		when(services.updatePerson(any(Person.class))).thenAnswer((invocation) -> invocation.getArgument(0));
+		when(services.updatePerson(any(PersonDTO.class))).thenAnswer((invocation) -> invocation.getArgument(0));
 		
 		Person updatedPerson = new Person(1L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com");
 		
@@ -152,7 +153,7 @@ class PersonControllerTest {
 		long personId = 1L;
 		when(services.findById(personId)).thenThrow(ResourceNotFoundException.class);
 		
-		when(services.updatePerson(any(Person.class))).thenAnswer((invocation) -> invocation.getArgument(1));
+		when(services.updatePerson(any(PersonDTO.class))).thenAnswer((invocation) -> invocation.getArgument(1));
 		
 		Person updatedPerson = new Person(1L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com");
 		

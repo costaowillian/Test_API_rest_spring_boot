@@ -27,7 +27,7 @@ public class Person implements Serializable {
 	private String lastName;
 	
 	@Column(nullable = false, length = 100)
-	private String adress;
+	private String address;
 	
 	@Column(nullable = false, length = 6)
 	private String gender;
@@ -38,19 +38,19 @@ public class Person implements Serializable {
 	public Person() {
 	}
 		
-	public Person(Long id, String firstName, String lastName, String adress, String gender, String email) {
+	public Person(Long id, String firstName, String lastName, String address, String gender, String email) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.adress = adress;
+		this.address = address;
 		this.gender = gender;
 		this.email = email;
 	}
 
-	public Person(String firstName, String lastName, String adress, String gender, String email) {
+	public Person(String firstName, String lastName, String address, String gender, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.adress = adress;
+		this.address = address;
 		this.gender = gender;
 		this.email = email;
 	}
@@ -79,12 +79,12 @@ public class Person implements Serializable {
 		this.lastName = lasttName;
 	}
 	
-	public String getAdress() {
-		return adress;
+	public String getAddress() {
+		return address;
 	}
 	
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setAddress(String adress) {
+		this.address = adress;
 	}
 	
 	public String getGender() {
@@ -105,7 +105,7 @@ public class Person implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(adress, firstName, gender, id, lastName);
+		return Objects.hash(address, firstName, gender, id, lastName);
 	}
 	
 	@Override
@@ -117,7 +117,7 @@ public class Person implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Person other = (Person) obj;
-		return Objects.equals(adress, other.adress) && Objects.equals(firstName, other.firstName)
+		return Objects.equals(address, other.address) && Objects.equals(firstName, other.firstName)
 				&& Objects.equals(gender, other.gender) && id == other.id && Objects.equals(lastName, other.lastName);
 	}
 }

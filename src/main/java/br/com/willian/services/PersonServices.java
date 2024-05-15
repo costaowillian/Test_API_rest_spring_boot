@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import br.com.willian.dtos.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +29,12 @@ public class PersonServices {
 	
 	public Person findById(Long id) {
 		logger.info("Finding one person...");
+		Optional<Person> obj = repository.findById(id);
 
-		return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+		return obj.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 	}
 	
-	public Person createPerson(Person person) {
+	public PersonDTO createPerson(PersonDTO person) {
 		logger.info("Creating one person...");
 		
 		Optional<Person> savedPerson = repository.findByEmail(person.getEmail());
@@ -40,21 +42,21 @@ public class PersonServices {
 		if(savedPerson.isPresent()) {
 			throw new DuplicateResourceException("Person already exist with given e-mail: " + person.getEmail());
 		}
-				
-		return repository.save(person);
+
+		return new PersonDTO(repository.save(fromDto(person)));
 	}
 	
-	public Person updatePerson(Person person) {
+	public PersonDTO updatePerson(PersonDTO person) {
 		logger.info("updating one person...");
 		
 		Person entity = repository.findById(person.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 		entity.setFirstName(person.getFirstName());
 		entity.setLastName(person.getLastName());
-		entity.setAdress(person.getAdress());
+		entity.setAddress(person.getAddress());
 		entity.setGender(person.getGender());
 		entity.setEmail(person.getEmail());
-		
-		return repository.save(person);
+
+		return new PersonDTO(repository.save(fromDto(person)));
 	}
 	
 	public void deletePerson(Long id) {
@@ -64,14 +66,8 @@ public class PersonServices {
 		
 		repository.delete(entity);
 	}
-	
-/*	private Person mockPerson(int i) {
-		Person person =  new Person();
-		person.setId(counter.incrementAndGet());
-		person.setFirstName("Person name " + i);
-		person.setLastName("Last name " + i);
-		person.setAdress("Some Adress " + i);
-		person.setGender("Gender " + i);
-		return person;
-	}*/
+
+	public Person fromDto(PersonDTO personDto) {
+		return new Person(personDto.getId(), personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getGender(), personDto.getEmail());
+	}
 }
