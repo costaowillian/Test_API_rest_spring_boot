@@ -11,19 +11,19 @@ import jakarta.persistence.Id;
 
 import java.io.Serializable;
 
-/*@JsonPropertyOrder({
+@JsonPropertyOrder({
         "id", "first_name", "last_name", "email", "gender", "Address",
-})*/
+})
 public class PersonDTO implements Serializable  {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    //@JsonProperty("first_name")
+    @JsonProperty("first_name")
     private String firstName;
 
-    //@JsonProperty("last_name")
+    @JsonProperty("last_name")
     private String lastName;
     private String address;
 
