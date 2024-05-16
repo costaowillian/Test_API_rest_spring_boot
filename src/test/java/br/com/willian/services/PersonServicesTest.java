@@ -102,7 +102,6 @@ public class PersonServicesTest {
 		assertNotNull(personOne, () -> "Should not return null");
 		assertNotNull(personOne.getKey(), () -> "ID Should not return null");
 		assertNotNull(personOne.getLinks(), () -> "Links Should not return null");
-		System.out.println(personOne.getLinks());
 		assertTrue(personOne.toString().contains("</api/v1/person/2>;rel=\"self\""), () -> "Links should Contains the string </api/v1/person/2>;rel=\"self\"");
 		assertNotNull(personsList, () -> "Should not return a empty list!");
 		assertEquals(2, personsList.size(), () -> "Persons List should have 2 Persons object!");

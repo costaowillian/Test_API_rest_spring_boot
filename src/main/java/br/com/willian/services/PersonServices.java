@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import br.com.willian.controllers.PersonController;
 import br.com.willian.dtos.PersonDTO;
+import br.com.willian.exceptions.RequiredObjectIsNullException;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -50,6 +51,9 @@ public class PersonServices {
 	}
 	
 	public PersonDTO createPerson(PersonDTO person) throws Exception {
+
+		if(person == null) throw new RequiredObjectIsNullException();
+
 		logger.info("Creating one person...");
 		
 		Optional<Person> savedPerson = repository.findByEmail(person.getEmail());
@@ -64,6 +68,9 @@ public class PersonServices {
 	}
 	
 	public PersonDTO updatePerson(PersonDTO person) throws Exception {
+
+		if(person == null) throw new RequiredObjectIsNullException();
+
 		logger.info("updating one person...");
 		
 		Person entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
