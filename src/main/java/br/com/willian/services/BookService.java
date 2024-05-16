@@ -56,7 +56,7 @@ public class BookService {
         return bookDto;
     }
 
-    public BooksDTO upate(BooksDTO bookDto) throws Exception{
+    public BooksDTO update(BooksDTO bookDto) throws Exception{
         if(bookDto == null) throw new RequiredObjectIsNullException();
 
         Book entity = repository.findById(bookDto.getKey())

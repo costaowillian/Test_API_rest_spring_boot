@@ -106,7 +106,7 @@ public class BookController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public ResponseEntity<BooksDTO> update(@RequestBody BooksDTO book) throws Exception{
-            return ResponseEntity.ok(service.upate(book));
+            return ResponseEntity.ok(service.update(book));
 
     }
 
