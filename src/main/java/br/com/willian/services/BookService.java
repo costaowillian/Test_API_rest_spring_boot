@@ -60,8 +60,19 @@ public class BookService {
 
         Book entity = repository.findById(bookDto.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+
         entity = updateEntity(entity, bookDto);
+
         BooksDTO result = new BooksDTO(repository.save(entity));
+        result.add(linkTo(methodOn(BookController.class).findById(result.getKey())).withSelfRel());
+        return result;
+    }
+
+    public void delete(Long id) {
+        Book entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+
+        repository.delete(entity);
     }
 
     public Book updateEntity(Book entity, BooksDTO booksDTO) {
@@ -75,5 +86,4 @@ public class BookService {
         return new Book(bookDto.getKey(), bookDto.getAuthor(), bookDto.getLaunchDate(),
                 bookDto.getPrice(), bookDto.getTitle());
     }
-
 }
