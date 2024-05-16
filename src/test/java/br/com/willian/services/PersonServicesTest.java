@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import br.com.willian.dtos.PersonDTO;
+import br.com.willian.exceptions.RequiredObjectIsNullException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,7 +66,7 @@ public class PersonServicesTest {
 		assertEquals("Willian", savedPerson.getFirstName(), () -> "Should return the same firstsNames");
 	}
 	
-	@DisplayName("test Given ExistingEmail When Save Person Should Return Throw Exception")
+	@DisplayName("test Given ExistingEmail When Save Person Should Throw Exception")
 	@Test
 	void testGivenExistingEmail_WhenSavePerson_ShouldThrowException() {
 		//Given / Arrange
@@ -174,5 +175,38 @@ public class PersonServicesTest {
 		
 		//Then /Assert
 		verify(repository, times(1)).delete(person0);
+	}
+
+	@DisplayName("test Given Null Person Should Throw Exception")
+	@Test
+	void testUpdate_WhenGivenNullPerson_ShouldThrowException() {
+		//Given / Arrange
+		String expectedMessage = "It is not allowed to persist a null object!";
+
+		//When / Act
+		Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+			services.updatePerson(null);
+		});
+
+		String actualMessage = exception.getMessage();
+
+		//Then /Assert
+		assertTrue(actualMessage.contains(expectedMessage));
+	}
+	@DisplayName("test Given NullPerson Should Throw Exception")
+	@Test
+	void testCreate_GivenNullPerson_ShouldThrowException() {
+		//Given / Arrange
+		String expectedMessage = "It is not allowed to persist a null object!";
+
+		//When / Act
+		Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+			services.createPerson(null);
+		});
+
+		String actualMessage = exception.getMessage();
+
+		//Then /Assert
+		assertTrue(actualMessage.contains(expectedMessage));
 	}
 }
