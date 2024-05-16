@@ -1,7 +1,6 @@
 package br.com.willian.dtos;
 
 import br.com.willian.model.Book;
-import br.com.willian.model.Person;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.RepresentationModel;
