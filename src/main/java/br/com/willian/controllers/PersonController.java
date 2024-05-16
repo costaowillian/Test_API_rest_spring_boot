@@ -44,11 +44,7 @@ public class PersonController {
 					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
 			})
 	public ResponseEntity<List<PersonDTO>> findAll() throws Exception{
-		try {
 			return ResponseEntity.ok().body(service.findAll());
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
 	}	
 	
 	@GetMapping(value = "/{id}",
@@ -109,11 +105,7 @@ public class PersonController {
 					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
 			})
 	public ResponseEntity<PersonDTO> update(@RequestBody PersonDTO person) throws Exception{
-		try {
 			return ResponseEntity.ok(service.updatePerson(person));
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
 	}
 	
 	@DeleteMapping("/{id}")
