@@ -19,9 +19,10 @@ public class Book implements Serializable {
     private String author;
 
     @Column(name =  "launch_date", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date launchDate;
 
-    @Column(name =  " price", nullable = false)
+    @Column(name =  "price", nullable = false)
     private Double price;
 
     @Column(name =  "title", nullable = false, length = 400)
