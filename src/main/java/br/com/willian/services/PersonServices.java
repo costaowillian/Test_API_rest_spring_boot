@@ -80,7 +80,7 @@ public class PersonServices {
 		entity.setGender(person.getGender());
 		entity.setEmail(person.getEmail());
 
-		PersonDTO personDTO = new PersonDTO(repository.save(fromDto(person)));
+		PersonDTO personDTO = new PersonDTO(repository.save(entity));
 		personDTO.add(linkTo(methodOn(PersonController.class).findById(personDTO.getKey())).withSelfRel());
 		return personDTO;
 	}
