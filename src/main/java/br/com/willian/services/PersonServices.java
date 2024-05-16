@@ -24,7 +24,7 @@ public class PersonServices {
 	private Logger logger = Logger.getLogger(PersonServices.class.getName());
 	
 	@Autowired
-	PersonRepository repository;
+	private PersonRepository repository;
 
 	public List<PersonDTO> findAll() throws Exception {
 		logger.info("Finding all persons...");
