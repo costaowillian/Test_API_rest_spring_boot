@@ -22,7 +22,7 @@ public class BooksDTO extends RepresentationModel<BooksDTO> implements Serializa
     private String author;
 
     @JsonProperty("release_date")
-    private Date launch_date;
+    private Date launchDate;
     private Double price;
     private String title;
 
@@ -31,7 +31,7 @@ public class BooksDTO extends RepresentationModel<BooksDTO> implements Serializa
     public BooksDTO(Book book) {
         this.key = book.getId();
         this.author = book.getAuthor();
-        this.launch_date = book.getLaunchDate();
+        this.launchDate = book.getLaunchDate();
         this.price = book.getPrice();
         this.title = book.getTitle();
     }
@@ -52,12 +52,12 @@ public class BooksDTO extends RepresentationModel<BooksDTO> implements Serializa
         this.author = author;
     }
 
-    public Date getLaunch_date() {
-        return launch_date;
+    public Date getLaunchDate() {
+        return launchDate;
     }
 
-    public void setLaunch_date(Date launch_date) {
-        this.launch_date = launch_date;
+    public void setLaunchDate(Date launch_date) {
+        this.launchDate = launch_date;
     }
 
     public Double getPrice() {
