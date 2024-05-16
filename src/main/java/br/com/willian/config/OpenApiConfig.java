@@ -11,12 +11,12 @@ import io.swagger.v3.oas.models.info.License;
 public class OpenApiConfig {
 	
 	@Bean
-	OpenAPI customOpenAPI() {
+	public OpenAPI customOpenAPI() {
 		return new OpenAPI()
 				.info(new Info()
 						.title("Hello Swagger OpenAPI")
 						.version("V1")
-						.description("Some Description about yout API.")
+						.description("Some Description about your API.")
 						.termsOfService("https://pub.willian.com.br/API")
 						.license(
 								new License()
