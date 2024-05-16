@@ -3,6 +3,7 @@ package br.com.willian.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import br.com.willian.controllers.PersonController;
 import br.com.willian.dtos.PersonDTO;
@@ -23,11 +24,19 @@ public class PersonServices {
 	
 	@Autowired
 	PersonRepository repository;
-	
-	public List<Person> findAll() {
+
+	public List<PersonDTO> findAll() throws Exception {
 		logger.info("Finding all persons...");
-		
-		return repository.findAll();
+		List<Person> list = repository.findAll();
+		List<PersonDTO> listDto = list.stream().map(x -> new PersonDTO(x)).collect(Collectors.toList());
+		listDto.forEach(p -> {
+            try {
+                p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+		return listDto;
 	}
 	
 	public PersonDTO findById(Long id) throws Exception {
@@ -40,7 +49,7 @@ public class PersonServices {
 		return personDto;
 	}
 	
-	public PersonDTO createPerson(PersonDTO person) {
+	public PersonDTO createPerson(PersonDTO person) throws Exception {
 		logger.info("Creating one person...");
 		
 		Optional<Person> savedPerson = repository.findByEmail(person.getEmail());
@@ -49,10 +58,12 @@ public class PersonServices {
 			throw new DuplicateResourceException("Person already exist with given e-mail: " + person.getEmail());
 		}
 
-		return new PersonDTO(repository.save(fromDto(person)));
+		PersonDTO personDTO = new PersonDTO(repository.save(fromDto(person)));
+		personDTO.add(linkTo(methodOn(PersonController.class).findById(personDTO.getKey())).withSelfRel());
+		return personDTO;
 	}
 	
-	public PersonDTO updatePerson(PersonDTO person) {
+	public PersonDTO updatePerson(PersonDTO person) throws Exception {
 		logger.info("updating one person...");
 		
 		Person entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
@@ -62,7 +73,9 @@ public class PersonServices {
 		entity.setGender(person.getGender());
 		entity.setEmail(person.getEmail());
 
-		return new PersonDTO(repository.save(fromDto(person)));
+		PersonDTO personDTO = new PersonDTO(repository.save(fromDto(person)));
+		personDTO.add(linkTo(methodOn(PersonController.class).findById(personDTO.getKey())).withSelfRel());
+		return personDTO;
 	}
 	
 	public void deletePerson(Long id) {

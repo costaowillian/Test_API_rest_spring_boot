@@ -74,9 +74,10 @@ class PersonControllerTest {
 	@Test
 	void testGivenListOfPersons_WhenFindAll_ShouldReturnPersonsList() throws JsonProcessingException, Exception {
 		//Given / Arrange
-		List<Person> persons = new ArrayList<>();
-		persons.add(person0);
-		persons.add(new Person(2L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com"));
+		List<PersonDTO> persons = new ArrayList<>();
+		persons.add(new PersonDTO(person0));
+		Person person2 = new Person(2L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com");
+		persons.add(new PersonDTO(person2));
 		
 		when(services.findAll()).thenReturn(persons);
 		

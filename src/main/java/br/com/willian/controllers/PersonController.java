@@ -23,9 +23,7 @@ public class PersonController {
 	@GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public ResponseEntity<List<PersonDTO>> findAll() throws Exception{
 		try {
-			List<Person> list = service.findAll();
-			List<PersonDTO> listDto = list.stream().map(x -> new PersonDTO(x)).collect(Collectors.toList());
-			return ResponseEntity.ok().body(listDto);
+			return ResponseEntity.ok().body(service.findAll());
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
@@ -33,13 +31,9 @@ public class PersonController {
 	
 	@GetMapping(value = "/{id}",
 			produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public ResponseEntity<PersonDTO> findById(@PathVariable(value = "id") Long id) throws Exception{
-		try {
+	public ResponseEntity<PersonDTO> findById(@PathVariable(value = "id") Long id) throws Exception {
 			PersonDTO obj = service.findById(id);
 			return ResponseEntity.ok().body(obj);
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
 	}
 	
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML},

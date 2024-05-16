@@ -50,7 +50,7 @@ public class PersonServicesTest {
 	
 	@DisplayName("test Given Person Object When Save Person Should Return Person Object")
 	@Test
-	void testGivenPersonObject_WhenSavePerson_ShouldReturnPersonObject() {
+	void testGivenPersonObject_WhenSavePerson_ShouldReturnPersonObject() throws Exception {
 		//Given / Arrange
 		when(repository.findByEmail(anyString())).thenReturn(Optional.empty());	
 		when(repository.save(person0)).thenReturn(person0);
@@ -84,15 +84,15 @@ public class PersonServicesTest {
 	
 	@DisplayName("Test Given Person List When Find All Persons Should Return Persons List")
 	@Test
-	void testGivenPersonList_WhenFindAllPersons_ShouldReturnPersonsList() {
+	void testGivenPersonList_WhenFindAllPersons_ShouldReturnPersonsList() throws Exception {
 		//Given / Arrange
-		Person person1 = new Person("Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com");
+		Person person1 = new Person(2L,"Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com");
 		
 		when(repository.findAll()).thenReturn(List.of(person0, person1));		
 		
 		
 		//When / Act
-		List<Person> personsList = services.findAll();
+		List<PersonDTO> personsList = services.findAll();
 		
 		//Then /Assert
 		assertNotNull(personsList, () -> "Should not return a empty list!");
@@ -101,13 +101,13 @@ public class PersonServicesTest {
 	
 	@DisplayName("Test Given Empty Person List When Find All Persons Shoud Return Empty Persons List")
 	@Test
-	void testGivenEmptyPersonList_WhenFindAllPersons_ShouldReturnEmptyPersonsList() {
+	void testGivenEmptyPersonList_WhenFindAllPersons_ShouldReturnEmptyPersonsList() throws Exception {
 		//Given / Arrange	
 		when(repository.findAll()).thenReturn(Collections.EMPTY_LIST);		
 		
 		
 		//When / Act
-		List<Person> personsList = services.findAll();
+		List<PersonDTO> personsList = services.findAll();
 		
 		//Then /Assert
 		assertTrue(personsList.isEmpty(), () -> "Person List should have empty");
@@ -130,7 +130,7 @@ public class PersonServicesTest {
 	
 	@DisplayName("test Given Person Object When Update Person Should Return Updated Person Object")
 	@Test
-	void testGivenPersonObject_WhenUpdatePerson_ShouldReturnUpdatedPersonObject() {
+	void testGivenPersonObject_WhenUpdatePerson_ShouldReturnUpdatedPersonObject() throws Exception {
 		//Given / Arrange
 		person0.setId(1L);
 		when(repository.findById(anyLong())).thenReturn(Optional.of(person0));

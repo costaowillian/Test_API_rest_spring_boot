@@ -1,13 +1,8 @@
 package br.com.willian.dtos;
 
 import br.com.willian.model.Person;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
@@ -19,6 +14,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
 
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("id")
     private Long key;
 
     @JsonProperty("first_name")
