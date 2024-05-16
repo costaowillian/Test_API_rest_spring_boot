@@ -21,6 +21,7 @@ import br.com.willian.dtos.PersonDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,8 +31,8 @@ import br.com.willian.exceptions.DuplicateResourceException;
 import br.com.willian.model.Person;
 import br.com.willian.repositories.PersonRepository;
 
-
 @ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PersonServicesTest {
 	
 	@Mock
@@ -60,6 +61,7 @@ public class PersonServicesTest {
 		
 		//Then /Assert
 		assertNotNull(savedPerson, () -> "Should not return null");
+		assertTrue(savedPerson.toString().contains("</api/v1/person/1>;rel=\"self\""));
 		assertEquals("Willian", savedPerson.getFirstName(), () -> "Should return the same firstsNames");
 	}
 	
@@ -93,13 +95,20 @@ public class PersonServicesTest {
 		
 		//When / Act
 		List<PersonDTO> personsList = services.findAll();
-		
+
+		PersonDTO personOne = personsList.get(1);
+
 		//Then /Assert
+		assertNotNull(personOne, () -> "Should not return null");
+		assertNotNull(personOne.getKey(), () -> "ID Should not return null");
+		assertNotNull(personOne.getLinks(), () -> "Links Should not return null");
+		System.out.println(personOne.getLinks());
+		assertTrue(personOne.toString().contains("</api/v1/person/2>;rel=\"self\""), () -> "Links should Contains the string </api/v1/person/2>;rel=\"self\"");
 		assertNotNull(personsList, () -> "Should not return a empty list!");
 		assertEquals(2, personsList.size(), () -> "Persons List should have 2 Persons object!");
 	}
 	
-	@DisplayName("Test Given Empty Person List When Find All Persons Shoud Return Empty Persons List")
+	@DisplayName("Test Given Empty Person List When Find All Persons Should Return Empty Persons List")
 	@Test
 	void testGivenEmptyPersonList_WhenFindAllPersons_ShouldReturnEmptyPersonsList() throws Exception {
 		//Given / Arrange	
@@ -125,6 +134,9 @@ public class PersonServicesTest {
 		
 		//Then /Assert
 		assertNotNull(savedPerson, () -> "Should not return null");
+		assertNotNull(savedPerson.getKey(), () -> "ID Should not return null");
+		assertNotNull(savedPerson.getLinks(), () -> "Links Should not return null");
+		assertTrue(savedPerson.toString().contains("</api/v1/person/1>;rel=\"self\""));
 		assertEquals("Willian", savedPerson.getFirstName(), () -> "Should return the same firstsNames");
 	}
 	
@@ -145,11 +157,12 @@ public class PersonServicesTest {
 		
 		//Then /Assert
 		assertNotNull(updatedPerson, () -> "Should not return null");
+		assertTrue(updatedPerson.toString().contains("</api/v1/person/1>;rel=\"self\""));
 		assertEquals("leonardo", updatedPerson.getFirstName(), () -> "Should return the same firstsNames");
 		assertEquals("leonardo@gmail.com", updatedPerson.getEmail(), () -> "Should return the same email");
 	}
 	
-	@DisplayName("test Given Person Id When delete Person Shoud Do Nothing")
+	@DisplayName("test Given Person Id When delete Person Should Do Nothing")
 	@Test
 	void testGivenPersonOId_WhenDeletePerson_ShouldDoNothing() {
 		//Given / Arrange
