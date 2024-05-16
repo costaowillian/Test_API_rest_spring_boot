@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import br.com.willian.controllers.PersonController;
 import br.com.willian.dtos.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.stereotype.Service;
 
 import br.com.willian.exceptions.DuplicateResourceException;
@@ -27,11 +30,14 @@ public class PersonServices {
 		return repository.findAll();
 	}
 	
-	public Person findById(Long id) {
+	public PersonDTO findById(Long id) throws Exception {
 		logger.info("Finding one person...");
-		Optional<Person> obj = repository.findById(id);
+		Optional<Person> obj = Optional.ofNullable(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID")));
 
-		return obj.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+        assert obj.orElse(null) != null;
+        PersonDTO personDto = new PersonDTO(obj.orElse(null));
+		personDto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+		return personDto;
 	}
 	
 	public PersonDTO createPerson(PersonDTO person) {
@@ -49,7 +55,7 @@ public class PersonServices {
 	public PersonDTO updatePerson(PersonDTO person) {
 		logger.info("updating one person...");
 		
-		Person entity = repository.findById(person.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+		Person entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 		entity.setFirstName(person.getFirstName());
 		entity.setLastName(person.getLastName());
 		entity.setAddress(person.getAddress());
@@ -68,6 +74,6 @@ public class PersonServices {
 	}
 
 	public Person fromDto(PersonDTO personDto) {
-		return new Person(personDto.getId(), personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getGender(), personDto.getEmail());
+		return new Person(personDto.getKey(), personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getGender(), personDto.getEmail());
 	}
 }

@@ -1,7 +1,4 @@
 spring:
-  application:
-    name: primeiro_projeto_API
-  
   datasource:
     url: jdbc:h2:~/testdb;DB_CLOSE_ON_EXIT=FALSE
     username: sa

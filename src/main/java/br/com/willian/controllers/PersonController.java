@@ -35,8 +35,8 @@ public class PersonController {
 			produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public ResponseEntity<PersonDTO> findById(@PathVariable(value = "id") Long id) throws Exception{
 		try {
-			Person obj = service.findById(id);
-			return ResponseEntity.ok().body(new PersonDTO(obj));
+			PersonDTO obj = service.findById(id);
+			return ResponseEntity.ok().body(obj);
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
@@ -49,7 +49,7 @@ public class PersonController {
 
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(person.getId()).toUri();
+				.buildAndExpand(person.getKey()).toUri();
 		return ResponseEntity.created(uri).body(person);
 	}
 	

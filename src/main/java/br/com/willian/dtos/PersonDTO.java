@@ -8,17 +8,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 
 @JsonPropertyOrder({
         "id", "first_name", "last_name", "email", "gender", "Address",
 })
-public class PersonDTO implements Serializable  {
+public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable  {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long key;
 
     @JsonProperty("first_name")
     private String firstName;
@@ -34,7 +35,7 @@ public class PersonDTO implements Serializable  {
     public PersonDTO() {}
 
     public PersonDTO(Person person) {
-        this.id = person.getId();
+        this.key = person.getId();
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
         this.address = person.getAddress();
@@ -42,12 +43,12 @@ public class PersonDTO implements Serializable  {
         this.email = person.getEmail();
     }
 
-    public Long getId() {
-        return id;
+    public Long getKey() {
+        return key;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setKey(Long id) {
+        this.key = id;
     }
 
     public String getFirstName() {

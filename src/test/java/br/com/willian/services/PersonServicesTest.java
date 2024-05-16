@@ -116,12 +116,12 @@ public class PersonServicesTest {
 	
 	@DisplayName("test Given Person Id When Find By Id Should Return Person Object")
 	@Test
-	void testGivenPersonId_WhenFindById_ShouldReturnPersonObject() {
+	void testGivenPersonId_WhenFindById_ShouldReturnPersonObject() throws Exception {
 		//Given / Arrange
 		when(repository.findById(anyLong())).thenReturn(Optional.of(person0));
 		
 		//When / Act
-		Person savedPerson = services.findById(1L);
+		PersonDTO savedPerson = services.findById(1L);
 		
 		//Then /Assert
 		assertNotNull(savedPerson, () -> "Should not return null");

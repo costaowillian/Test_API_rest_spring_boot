@@ -94,7 +94,7 @@ class PersonControllerTest {
 	void testGivenPersonId_WhenFindById_ShouldReturnPersonObject() throws JsonProcessingException, Exception {
 		//Given / Arrange
 		long personId = 1L;
-		when(services.findById(personId)).thenReturn(person0);
+		when(services.findById(personId)).thenReturn(new PersonDTO(person0));
 		
 		//When / Act
 		ResultActions response =  mockMvc.perform(get("/api/v1/person/{id}", personId));
@@ -127,7 +127,7 @@ class PersonControllerTest {
 	void testGivenUpdatePerson_WhenUpdate_ShouldReturnUpdatedPersonObject() throws JsonProcessingException, Exception {
 		//Given / Arrange
 		long personId = 1L;
-		when(services.findById(personId)).thenReturn(person0);
+		when(services.findById(personId)).thenReturn(new PersonDTO(person0));
 		when(services.updatePerson(any(PersonDTO.class))).thenAnswer((invocation) -> invocation.getArgument(0));
 		
 		PersonDTO updatedPerson = new PersonDTO(person0);
