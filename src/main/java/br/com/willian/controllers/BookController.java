@@ -1,5 +1,8 @@
 package br.com.willian.controllers;
 
+import java.net.URI;
+import java.util.List;
+
 import br.com.willian.dtos.BooksDTO;
 import br.com.willian.services.BookService;
 import br.com.willian.util.MediaType;
@@ -13,9 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/books")
