@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -33,7 +34,7 @@ import br.com.willian.exceptions.ResourceNotFoundException;
 import br.com.willian.model.Person;
 import br.com.willian.services.PersonServices;
 
-@WebMvcTest
+@WebMvcTest(PersonController.class)
 class PersonControllerTest {
 
 	@Autowired
@@ -41,7 +42,7 @@ class PersonControllerTest {
 	
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	@MockBean
 	private PersonServices services;
 	
@@ -164,6 +165,7 @@ class PersonControllerTest {
 				.content(objectMapper.writeValueAsString(updatedPerson)));
 		
 		//Then /Assert
+
 		response.andExpect(status().isNotFound())
 			.andDo(print());
 	}

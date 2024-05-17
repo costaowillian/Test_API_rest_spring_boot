@@ -19,7 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1/books")
-@Tag(name = "Books", description = "Endpoints For Managing People")
+@Tag(name = "Books", description = "Endpoints For Managing Books")
 public class BookController {
 
     @Autowired

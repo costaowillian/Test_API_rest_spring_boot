@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import br.com.willian.services.PersonServices;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+//@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/person")
 @Tag(name = "People", description = "Endpoints For Managing People")
@@ -25,6 +26,7 @@ public class PersonController {
 	@Autowired
 	private PersonServices service;
 
+	//@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Operation(
 			summary = "Finds All People",
@@ -45,8 +47,8 @@ public class PersonController {
 			})
 	public ResponseEntity<List<PersonDTO>> findAll() throws Exception{
 			return ResponseEntity.ok().body(service.findAll());
-	}	
-	
+	}
+
 	@GetMapping(value = "/{id}",
 			produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Operation(
@@ -66,7 +68,8 @@ public class PersonController {
 			PersonDTO obj = service.findById(id);
 			return ResponseEntity.ok().body(obj);
 	}
-	
+
+	//@CrossOrigin(origins = { "http://localhost:8080", "https://willian.com.br" })
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML},
 			produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Operation(
