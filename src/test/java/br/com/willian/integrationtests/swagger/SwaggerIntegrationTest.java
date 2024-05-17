@@ -1,7 +1,7 @@
-package br.com.willian.integrationtestes.swagger;
+package br.com.willian.integrationtests.swagger;
 
 import br.com.willian.cnfigs.TestConfigs;
-import br.com.willian.integrationtestes.testcontainers.AbstractIntegrationTest;
+import br.com.willian.integrationtests.testcontainers.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import static io.restassured.RestAssured.given;

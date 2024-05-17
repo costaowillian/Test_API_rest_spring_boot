@@ -1,4 +1,4 @@
-package br.com.willian.integrationtestes.testcontainers;
+package br.com.willian.integrationtests.testcontainers;
 
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
