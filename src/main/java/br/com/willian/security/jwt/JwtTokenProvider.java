@@ -1,4 +1,4 @@
-package br.com.willian.securityjwt;
+package br.com.willian.security.jwt;
 
 import br.com.willian.dtos.security.TokenDTO;
 import br.com.willian.exceptions.InvalidJwtAuthenticationException;
