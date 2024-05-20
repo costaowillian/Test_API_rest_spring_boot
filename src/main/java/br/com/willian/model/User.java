@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class Users implements UserDetails, Serializable {
+public class User implements UserDetails, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class Users implements UserDetails, Serializable {
     inverseJoinColumns = {@JoinColumn (name = "id_permission")})
     private List<Permission> permissions;
 
-    public Users() {
+    public User() {
     }
 
     public List<String> getRoles() {
@@ -162,7 +162,7 @@ public class Users implements UserDetails, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Users users = (Users) o;
+        User users = (User) o;
         return Objects.equals(Id, users.Id) && Objects.equals(userName, users.userName) && Objects.equals(fullName, users.fullName) && Objects.equals(password, users.password) && Objects.equals(accountNonExpired, users.accountNonExpired) && Objects.equals(accountNonLocked, users.accountNonLocked) && Objects.equals(credentialsNonExpired, users.credentialsNonExpired) && Objects.equals(enabled, users.enabled) && Objects.equals(permissions, users.permissions);
     }
 
