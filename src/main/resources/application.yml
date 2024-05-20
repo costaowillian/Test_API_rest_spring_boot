@@ -1,5 +1,10 @@
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000
+security:
+  jwt:
+    token:
+      secret-key: 53cce37
+      expire-length: 3600000
 spring:
   application:
     name: primeiro_projeto_API
