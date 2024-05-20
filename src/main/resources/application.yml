@@ -10,7 +10,7 @@ spring:
     name: primeiro_projeto_API
 
   profiles:
-    active: test
+    active: dev
 
   jpa:
     open-in-view: false

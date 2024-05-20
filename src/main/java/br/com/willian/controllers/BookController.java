@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import br.com.willian.dtos.BooksDTO;
-import br.com.willian.services.BookService;
+import br.com.willian.services.BookServices;
 import br.com.willian.util.MediaType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class BookController {
 
     @Autowired
-    private BookService service;
+    private BookServices service;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Operation(

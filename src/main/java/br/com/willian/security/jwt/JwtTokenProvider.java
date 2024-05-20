@@ -7,7 +7,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +20,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-
 
 @Service
 public class JwtTokenProvider {

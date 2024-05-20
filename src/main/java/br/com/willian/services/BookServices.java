@@ -1,26 +1,22 @@
 package br.com.willian.services;
 
 import br.com.willian.controllers.BookController;
-import br.com.willian.controllers.PersonController;
 import br.com.willian.dtos.BooksDTO;
-import br.com.willian.dtos.PersonDTO;
 import br.com.willian.exceptions.RequiredObjectIsNullException;
 import br.com.willian.exceptions.ResourceNotFoundException;
 import br.com.willian.model.Book;
-import br.com.willian.model.Person;
 import br.com.willian.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-public class BookService {
+public class BookServices {
 
     @Autowired
     private BookRepository repository;

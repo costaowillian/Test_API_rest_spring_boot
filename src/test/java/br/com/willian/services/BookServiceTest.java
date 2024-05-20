@@ -10,7 +10,6 @@ import br.com.willian.exceptions.RequiredObjectIsNullException;
 import br.com.willian.exceptions.ResourceNotFoundException;
 import br.com.willian.model.Book;
 import br.com.willian.repositories.BookRepository;
-import br.com.willian.services.BookService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ public class BookServiceTest {
     private BookRepository repository;
 
     @InjectMocks
-    private BookService service;
+    private BookServices service;
 
     private Book book;
 
