@@ -1,9 +1,6 @@
 package br.com.willian.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -19,6 +16,8 @@ import java.util.Optional;
 
 import br.com.willian.dtos.PersonDTO;
 import br.com.willian.exceptions.RequiredObjectIsNullException;
+import jakarta.validation.constraints.AssertFalse;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -175,6 +174,24 @@ public class PersonServicesTest {
 		
 		//Then /Assert
 		verify(repository, times(1)).delete(person0);
+	}
+	@DisplayName("test Disable Person by Id Should Return Person Object")
+	@Test
+	void testDisablePersonById_ShouldReturnPersonObject() throws Exception {
+		//Given / Arrange
+		person0.setEnabled(false);
+		when(repository.findById(anyLong())).thenReturn(Optional.of(person0));
+
+		//When / Act
+		PersonDTO savedPerson = services.disablePerson(1L);
+
+		//Then /Assert
+		assertNotNull(savedPerson, () -> "Should not return null");
+		assertNotNull(savedPerson.getKey(), () -> "ID Should not return null");
+		assertFalse(savedPerson.isEnabled(), () -> "Should not enable");
+		assertNotNull(savedPerson.getLinks(), () -> "Links Should not return null");
+		assertTrue(savedPerson.toString().contains("</api/v1/person/1>;rel=\"self\""));
+		assertEquals("Willian", savedPerson.getFirstName(), () -> "Should return the same firstsNames");
 	}
 
 	@DisplayName("test Given Null Person Should Throw Exception")
