@@ -10,11 +10,13 @@ import br.com.willian.integrationtests.dto.security.AccountCredentialsDTO;
 import br.com.willian.integrationtests.dto.security.TokenDTO;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 import br.com.willian.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.specification.RequestSpecification;
@@ -147,8 +149,6 @@ class PersonControllerTest extends AbstractIntegrationTest {
 
 		assertNotNull(createdPerson, () -> "Person Should not null");
 
-
-
 		assertNotNull(createdPerson.getKey(), () -> "Person Id Should not null");
 		assertNotNull(createdPerson.getEmail(), () -> "Person email Should not null");
 		assertNotNull(createdPerson.getFirstName(), () -> "Person first name Should not null");
@@ -158,6 +158,55 @@ class PersonControllerTest extends AbstractIntegrationTest {
 		assertEquals("Jackson", createdPerson.getLastName(), () -> "Person last name and Person last name Should be the same!");
 		assertEquals("richard@gmail.com", createdPerson.getEmail(), () -> "Person email and Person Email Should  be the same!");
 		assertEquals("Richard", createdPerson.getFirstName(), () -> "Person first name and Person first name Should  be the same!");
+	}
+
+	@Test
+	@Order(4)
+	public void testDelete() throws IOException {
+
+		given().spec(specification)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
+				.pathParams("id", personDTO.getKey()).when().delete("{id}")
+				.then()
+				.statusCode(204);
+	}
+
+	@Test
+	@Order(5)
+	public void testFindAll() throws IOException {
+
+		List<PersonDTO> content = given().spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.body(personDTO).when().get()
+				.then()
+				.statusCode(200)
+				.extract()
+				.body()
+				.as(new TypeRef<List<PersonDTO>>() {});
+
+		PersonDTO findFirstPerson = content.getFirst();
+
+		assertNotNull(findFirstPerson.getKey(), () -> "Person Id Should not null");
+		assertNotNull(findFirstPerson.getEmail(), () -> "Person email Should not null");
+		assertNotNull(findFirstPerson.getFirstName(), () -> "Person first name Should not null");
+
+		assertEquals(1, findFirstPerson.getKey(), () ->  "The Person Id should be 1");
+
+		assertEquals("Senna", findFirstPerson.getLastName(), () -> " find First Person last name and Person last name Should be the same!");
+		assertEquals("ayrton@gmail.com", findFirstPerson.getEmail(), () -> " find First Person email and Person Email Should  be the same!");
+		assertEquals("Ayrton", findFirstPerson.getFirstName(), () -> " find First Person first name and Person first name Should  be the same!");
+
+		PersonDTO findPerson = content.get(1);
+
+		assertNotNull(findPerson.getKey(), () -> "Person Id Should not null");
+		assertNotNull(findPerson.getEmail(), () -> "Person email Should not null");
+		assertNotNull(findPerson.getFirstName(), () -> "Person first name Should not null");
+
+		assertEquals(2, findPerson.getKey(), () ->  "The Person Id should be 2");
+
+		assertEquals("da Vinci", findPerson.getLastName(), () -> " find First Person last name and Person last name Should be the same!");
+		assertEquals("leonardo@gmail.com", findPerson.getEmail(), () -> " find First Person email and Person Email Should  be the same!");
+		assertEquals("Leonardo", findPerson.getFirstName(), () -> " find First Person first name and Person first name Should  be the same!");
 	}
 
 	private void mockPerson() {
