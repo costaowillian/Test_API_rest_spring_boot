@@ -1,8 +1,6 @@
-package br.com.willian.integrationtests.controller.withjson;
+package br.com.willian.integrationtests.controller.withxml;
 
 import br.com.willian.cnfigs.TestConfigs;
-
-
 
 import br.com.willian.integrationtests.dto.PersonDTO;
 import br.com.willian.integrationtests.dto.security.AccountCredentialsDTO;
@@ -25,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PersonControllerJsonTest extends AbstractIntegrationTest {
+public class PersonControllerXmlTest extends AbstractIntegrationTest {
 
 	private static RequestSpecification specification;
 	private static ObjectMapper objectMapper;
@@ -48,7 +46,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		String accessToken = given()
 				.basePath("/auth/signin")
 				.port(TestConfigs.SERVER_PORT)
-				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.contentType(TestConfigs.CONTENT_TYPE_XML)
 				.body(user).when().post()
 				.then()
 				.statusCode(200)
@@ -73,7 +71,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		mockPerson();
 
 		String content = given().spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.contentType(TestConfigs.CONTENT_TYPE_XML)
 				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
 					.body(personDTO).when().post()
 				.then()
@@ -104,7 +102,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		mockPerson();
 
 		String content = given().spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.contentType(TestConfigs.CONTENT_TYPE_XML)
 				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_FAIL)
 				.body(personDTO).when().post()
 				.then()
@@ -126,7 +124,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		mockPerson();
 
 		String content = given().spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.contentType(TestConfigs.CONTENT_TYPE_XML)
 				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
 				.pathParams("id", personDTO.getKey()).when().get("{id}")
 				.then()
@@ -157,7 +155,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		mockPerson();
 
 		String content = given().spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.contentType(TestConfigs.CONTENT_TYPE_XML)
 				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_FAIL)
 				.pathParams("id", personDTO.getKey()).when().get("{id}")
 				.then()

@@ -1,8 +1,6 @@
-package br.com.willian.integrationtests.controller.withjson;
+package br.com.willian.integrationtests.controller.withxml;
 
 import br.com.willian.cnfigs.TestConfigs;
-
-
 import br.com.willian.integrationtests.dto.security.AccountCredentialsDTO;
 import br.com.willian.integrationtests.dto.security.TokenDTO;
 import br.com.willian.integrationtests.testcontainers.AbstractIntegrationTest;
@@ -20,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AuthControllerJsonTest extends AbstractIntegrationTest {
+public class AuthControllerXmlTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
     private static TokenDTO tokenDTO;
@@ -33,7 +31,7 @@ public class AuthControllerJsonTest extends AbstractIntegrationTest {
         tokenDTO = given()
                 .basePath("/auth/signin")
                 .port(TestConfigs.SERVER_PORT)
-                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .contentType(TestConfigs.CONTENT_TYPE_XML)
                 .body(user).when().post()
                 .then()
                 .statusCode(200)
@@ -53,7 +51,7 @@ public class AuthControllerJsonTest extends AbstractIntegrationTest {
         TokenDTO newtokenDTO = given()
                 .basePath("/auth/refresh")
                 .port(TestConfigs.SERVER_PORT)
-                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .contentType(TestConfigs.CONTENT_TYPE_XML)
                 .pathParams("username", tokenDTO.getUserName())
                 .header(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getRefreshToken()).when().put("{username}")
                 .then()

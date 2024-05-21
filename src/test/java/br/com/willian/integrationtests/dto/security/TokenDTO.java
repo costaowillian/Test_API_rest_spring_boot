@@ -1,4 +1,4 @@
-package br.com.willian.dtos.security;
+package br.com.willian.integrationtests.dto.security;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
