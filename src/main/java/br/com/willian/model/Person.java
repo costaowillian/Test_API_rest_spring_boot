@@ -34,25 +34,30 @@ public class Person implements Serializable {
 	
 	@Column(nullable = false, length = 100)
 	private String email;
+
+	@Column(nullable = false)
+	private boolean enabled;
 	
 	public Person() {
 	}
 		
-	public Person(Long id, String firstName, String lastName, String address, String gender, String email) {
+	public Person(Long id, String firstName, String lastName, String address, String gender, String email, boolean enabled) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
 		this.gender = gender;
 		this.email = email;
+		this.enabled = enabled;
 	}
 
-	public Person(String firstName, String lastName, String address, String gender, String email) {
+	public Person(String firstName, String lastName, String address, String gender, String email, boolean enabled) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
 		this.gender = gender;
 		this.email = email;
+		this.enabled = enabled;
 	}
 
 	public long getId() {
@@ -103,21 +108,24 @@ public class Person implements Serializable {
 		this.email = email;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Person person = (Person) o;
+		return enabled == person.enabled && Objects.equals(id, person.id) && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(address, person.address) && Objects.equals(gender, person.gender) && Objects.equals(email, person.email);
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, firstName, gender, id, lastName);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Person other = (Person) obj;
-		return Objects.equals(address, other.address) && Objects.equals(firstName, other.firstName)
-				&& Objects.equals(gender, other.gender) && id == other.id && Objects.equals(lastName, other.lastName);
+		return Objects.hash(id, firstName, lastName, address, gender, email, enabled);
 	}
 }

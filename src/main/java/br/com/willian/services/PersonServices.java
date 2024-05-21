@@ -17,6 +17,7 @@ import br.com.willian.exceptions.DuplicateResourceException;
 import br.com.willian.exceptions.ResourceNotFoundException;
 import br.com.willian.model.Person;
 import br.com.willian.repositories.PersonRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PersonServices {
@@ -84,6 +85,20 @@ public class PersonServices {
 		personDTO.add(linkTo(methodOn(PersonController.class).findById(personDTO.getKey())).withSelfRel());
 		return personDTO;
 	}
+
+	@Transactional
+	public PersonDTO disablePerson(Long id) throws Exception {
+		logger.info("Disabling one person...");
+
+		repository.disablePerson(id);
+
+		Optional<Person> obj = Optional.ofNullable(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID")));
+
+		assert obj.orElse(null) != null;
+		PersonDTO personDto = new PersonDTO(obj.orElse(null));
+		personDto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+		return personDto;
+	}
 	
 	public void deletePerson(Long id) {
 		logger.info("deleting one person...");
@@ -94,6 +109,6 @@ public class PersonServices {
 	}
 
 	public Person fromDto(PersonDTO personDto) {
-		return new Person(personDto.getKey(), personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getGender(), personDto.getEmail());
+		return new Person(personDto.getKey(), personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getGender(), personDto.getEmail(), personDto.isEnabled());
 	}
 }

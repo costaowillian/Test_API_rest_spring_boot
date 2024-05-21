@@ -47,7 +47,7 @@ public class PersonServicesTest {
 	@BeforeEach
 	void setup(){
 		//Given / Arrange
-		person0 = new Person(1L,"Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
+		person0 = new Person(1L,"Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com", true);
 	}
 	
 	@DisplayName("test Given Person Object When Save Person Should Return Person Object")
@@ -89,7 +89,7 @@ public class PersonServicesTest {
 	@Test
 	void testGivenPersonList_WhenFindAllPersons_ShouldReturnPersonsList() throws Exception {
 		//Given / Arrange
-		Person person1 = new Person(2L,"Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com");
+		Person person1 = new Person(2L,"Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com", true);
 		
 		when(repository.findAll()).thenReturn(List.of(person0, person1));		
 		

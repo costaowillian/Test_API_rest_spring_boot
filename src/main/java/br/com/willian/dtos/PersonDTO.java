@@ -3,12 +3,13 @@ package br.com.willian.dtos;
 import br.com.willian.model.Person;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.persistence.Column;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 
 @JsonPropertyOrder({
-        "id", "first_name", "last_name", "email", "gender", "Address",
+        "id", "first_name", "last_name", "email", "gender", "Address", "enabled"
 })
 public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable  {
 
@@ -28,6 +29,8 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     private String gender;
     private String email;
 
+    private boolean enabled;
+
     public PersonDTO() {}
 
     public PersonDTO(Person person) {
@@ -37,6 +40,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.address = person.getAddress();
         this.gender = person.getGender();
         this.email = person.getEmail();
+        this.enabled = person.isEnabled();
     }
 
     public Long getKey() {
@@ -85,5 +89,13 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

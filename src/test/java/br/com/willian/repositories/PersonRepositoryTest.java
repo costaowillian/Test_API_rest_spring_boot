@@ -26,7 +26,7 @@ class PersonRepositoryTest {
 	@BeforeEach
 	void setup(){
 		//Given / Arrange
-		person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
+		person0 = new Person("Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com", true);
 		repository.save(person0);
 	}
 		
@@ -52,7 +52,7 @@ class PersonRepositoryTest {
 	@Test
 	void testGivenPersonList_WhenFindAll_ThenReturnPersonList() {
 		//Given / Arrange
-		Person person1 = new Person("Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com");
+		Person person1 = new Person("Leonardo", "Silva", "Salvador - BA", "Male", "leonardo@gmail.com", true);
 		
 		repository.save(person1);
 		
