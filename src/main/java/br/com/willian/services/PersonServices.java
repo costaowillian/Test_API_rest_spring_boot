@@ -38,8 +38,8 @@ public class PersonServices {
 	public PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable) throws Exception {
 		logger.info("Finding all persons...");
 
-		Page<Person> varpersonPage = repository.findAll(pageable);
-		Page<PersonDTO> personDtoPage = varpersonPage.map(x -> new PersonDTO(x));
+		Page<Person> personPage = repository.findAll(pageable);
+		Page<PersonDTO> personDtoPage = personPage.map(x -> new PersonDTO(x));
 		personDtoPage.forEach(p -> {
             try {
                 p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel());

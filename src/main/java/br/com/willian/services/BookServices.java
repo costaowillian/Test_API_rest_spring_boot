@@ -7,9 +7,14 @@ import br.com.willian.exceptions.ResourceNotFoundException;
 import br.com.willian.model.Book;
 import br.com.willian.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -21,17 +26,24 @@ public class BookServices {
     @Autowired
     private BookRepository repository;
 
-    public List<BooksDTO> findAll() throws Exception{
-        List<Book> list = repository.findAll();
-        List<BooksDTO> listDTO = list.stream().map(x -> new BooksDTO(x)).toList();
-        listDTO.forEach(p -> {
+    @Autowired
+    private PagedResourcesAssembler<BooksDTO> assembler;
+
+    public PagedModel<EntityModel<BooksDTO>> findAll(Pageable pageable) throws Exception{
+        Page<Book> bookPage = repository.findAll(pageable);
+        Page<BooksDTO> booksDTOPage = bookPage.map(x -> new BooksDTO(x));
+        booksDTOPage.forEach(p -> {
             try {
                 p.add(linkTo(methodOn(BookController.class).findById(p.getKey())).withSelfRel());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-        return  listDTO;
+
+        Link link = linkTo(methodOn(BookController.class).findAll(pageable.getPageNumber(),
+                pageable.getPageSize(), "asc")).withSelfRel();
+
+        return assembler.toModel(booksDTOPage, link);
     }
 
     public BooksDTO findById(Long id) throws Exception{
