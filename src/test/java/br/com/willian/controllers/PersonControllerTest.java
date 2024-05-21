@@ -90,6 +90,7 @@ class PersonControllerTest extends AbstractIntegrationTest {
 		assertNotNull(createdPerson.getKey(), () -> "Created Person Id Should not null");
 		assertNotNull(createdPerson.getEmail(), () -> "Created Person email Should not null");
 		assertNotNull(createdPerson.getFirstName(), () -> "Created Person first name Should not null");
+		assertTrue(createdPerson.isEnabled(), () -> "Person enable Should be true");
 
 		assertTrue(createdPerson.getKey() > 0, () ->  "The Person Id should be bigger then 0");
 
@@ -122,6 +123,7 @@ class PersonControllerTest extends AbstractIntegrationTest {
 		assertNotNull(createdPerson.getKey(), () -> "Update Person Id Should not null");
 		assertNotNull(createdPerson.getEmail(), () -> "Update Person email Should not null");
 		assertNotNull(createdPerson.getFirstName(), () -> "Update Person first name Should not null");
+		assertTrue(createdPerson.isEnabled(), () -> "Person enable Should be true");
 
 		assertEquals("Jackson", createdPerson.getLastName(), () -> "Update Person last name and Person last name Should be the same!");
 		assertEquals("richard@gmail.com", createdPerson.getEmail(), () -> "Update Person email and Person Email Should  be the same!");
@@ -152,6 +154,7 @@ class PersonControllerTest extends AbstractIntegrationTest {
 		assertNotNull(createdPerson.getKey(), () -> "Person Id Should not null");
 		assertNotNull(createdPerson.getEmail(), () -> "Person email Should not null");
 		assertNotNull(createdPerson.getFirstName(), () -> "Person first name Should not null");
+		assertTrue(createdPerson.isEnabled(), () -> "Person enable Should be true");
 
 		assertTrue(createdPerson.getKey() > 0, () ->  "The Person Id should be bigger then 0");
 
@@ -162,6 +165,37 @@ class PersonControllerTest extends AbstractIntegrationTest {
 
 	@Test
 	@Order(4)
+	public void testDisablePersonById() throws IOException {
+
+		String content = given().spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
+				.pathParams("id", personDTO.getKey()).when().patch("{id}")
+				.then()
+				.statusCode(200)
+				.extract()
+				.body()
+				.asString();
+
+		PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
+		personDTO = createdPerson;
+
+		assertNotNull(createdPerson, () -> "Person Should not null");
+
+		assertNotNull(createdPerson.getKey(), () -> "Person Id Should not null");
+		assertNotNull(createdPerson.getEmail(), () -> "Person email Should not null");
+		assertNotNull(createdPerson.getFirstName(), () -> "Person first name Should not null");
+		assertFalse(createdPerson.isEnabled(), () -> "Person enable Should be false");
+
+		assertTrue(createdPerson.getKey() > 0, () ->  "The Person Id should be bigger then 0");
+
+		assertEquals("Jackson", createdPerson.getLastName(), () -> "Person last name and Person last name Should be the same!");
+		assertEquals("richard@gmail.com", createdPerson.getEmail(), () -> "Person email and Person Email Should  be the same!");
+		assertEquals("Richard", createdPerson.getFirstName(), () -> "Person first name and Person first name Should  be the same!");
+	}
+
+	@Test
+	@Order(5)
 	public void testDelete() throws IOException {
 
 		given().spec(specification)
@@ -172,7 +206,7 @@ class PersonControllerTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	@Order(5)
+	@Order(6)
 	public void testFindAll() throws IOException {
 
 		List<PersonDTO> content = given().spec(specification)
@@ -189,6 +223,7 @@ class PersonControllerTest extends AbstractIntegrationTest {
 		assertNotNull(findFirstPerson.getKey(), () -> "Person Id Should not null");
 		assertNotNull(findFirstPerson.getEmail(), () -> "Person email Should not null");
 		assertNotNull(findFirstPerson.getFirstName(), () -> "Person first name Should not null");
+		assertTrue(findFirstPerson.isEnabled(), () -> "Person enable Should be true");
 
 		assertEquals(1, findFirstPerson.getKey(), () ->  "The Person Id should be 1");
 
@@ -201,6 +236,7 @@ class PersonControllerTest extends AbstractIntegrationTest {
 		assertNotNull(findPerson.getKey(), () -> "Person Id Should not null");
 		assertNotNull(findPerson.getEmail(), () -> "Person email Should not null");
 		assertNotNull(findPerson.getFirstName(), () -> "Person first name Should not null");
+		assertTrue(findPerson.isEnabled(), () -> "Person enable Should be true");
 
 		assertEquals(2, findPerson.getKey(), () ->  "The Person Id should be 2");
 
@@ -215,5 +251,6 @@ class PersonControllerTest extends AbstractIntegrationTest {
 		personDTO.setAddress("New York City - USA");
 		personDTO.setGender("Male");
 		personDTO.setEmail("richard@gmail.com");
+		personDTO.setEnabled(true);
 	}
 }
