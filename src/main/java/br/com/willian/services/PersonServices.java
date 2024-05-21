@@ -1,9 +1,7 @@
 package br.com.willian.services;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import br.com.willian.controllers.PersonController;
 import br.com.willian.dtos.PersonDTO;
@@ -11,6 +9,13 @@ import br.com.willian.exceptions.RequiredObjectIsNullException;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 import br.com.willian.exceptions.DuplicateResourceException;
@@ -27,18 +32,26 @@ public class PersonServices {
 	@Autowired
 	private PersonRepository repository;
 
-	public List<PersonDTO> findAll() throws Exception {
+	@Autowired
+	private PagedResourcesAssembler<PersonDTO> assembler;
+
+	public PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable) throws Exception {
 		logger.info("Finding all persons...");
-		List<Person> list = repository.findAll();
-		List<PersonDTO> listDto = list.stream().map(x -> new PersonDTO(x)).collect(Collectors.toList());
-		listDto.forEach(p -> {
+
+		Page<Person> varpersonPage = repository.findAll(pageable);
+		Page<PersonDTO> personDtoPage = varpersonPage.map(x -> new PersonDTO(x));
+		personDtoPage.forEach(p -> {
             try {
                 p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-		return listDto;
+
+		Link link = linkTo(methodOn(PersonController.class).findAll(pageable.getPageNumber(),
+				pageable.getPageSize(), "asc")).withSelfRel();
+
+		return assembler.toModel(personDtoPage, link);
 	}
 	
 	public PersonDTO findById(Long id) throws Exception {
