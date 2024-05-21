@@ -1,189 +1,170 @@
 package br.com.willian.controllers;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
+import br.com.willian.cnfigs.TestConfigs;
+import br.com.willian.integrationtests.dto.PersonDTO;
+import br.com.willian.integrationtests.dto.security.AccountCredentialsDTO;
+import br.com.willian.integrationtests.dto.security.TokenDTO;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 
-import br.com.willian.dtos.PersonDTO;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import br.com.willian.integrationtests.testcontainers.AbstractIntegrationTest;
+import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.willian.exceptions.ResourceNotFoundException;
-import br.com.willian.model.Person;
-import br.com.willian.services.PersonServices;
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class PersonControllerTest extends AbstractIntegrationTest {
 
-@WebMvcTest(PersonController.class)
-class PersonControllerTest {
+	private static RequestSpecification specification;
+	private static ObjectMapper objectMapper;
 
-	@Autowired
-	private MockMvc mockMvc;
-	
-	@Autowired
-	private ObjectMapper objectMapper;
+	private static PersonDTO personDTO;
 
-	@MockBean
-	private PersonServices services;
-	
-	private Person person0;
-	
-	@BeforeEach
-	void setup(){
-		//Given / Arrange
-		person0 = new Person(1L, "Willian", "Costa", "Feira de Santana - BA", "Male", "willian@gmail.com");
-	}
-	
-	@DisplayName("Test Given Person Object When Create Person Should Return Saved Person")
-	@Test
-	void testGivenPersonObject_WhenCreatePerson_ShouldReturnSavedPerson() throws JsonProcessingException, Exception {
-		//Given / Arrange
-		when(services.createPerson(any(PersonDTO.class))).thenAnswer((invocation) -> invocation.getArgument(0));
-		
-		//When / Act
-		ResultActions response =  mockMvc.perform(post("/api/v1/person").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(new PersonDTO(person0))));
-		
-		//Then /Assert
-		response.andDo(print()).andExpect(status().isCreated())
-				.andExpect(jsonPath("$.first_name", is(person0.getFirstName())))
-				.andExpect(jsonPath("$.last_name", is(person0.getLastName())))
-				.andExpect(jsonPath("$.email", is(person0.getEmail())));
-	}
-	
-	@DisplayName("Test Given Person List Of Persons When Find All Should Return Persons List")
-	@Test
-	void testGivenListOfPersons_WhenFindAll_ShouldReturnPersonsList() throws JsonProcessingException, Exception {
-		//Given / Arrange
-		List<PersonDTO> persons = new ArrayList<>();
-		persons.add(new PersonDTO(person0));
-		Person person2 = new Person(2L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com");
-		persons.add(new PersonDTO(person2));
-		
-		when(services.findAll()).thenReturn(persons);
-		
-		//When / Act
-		ResultActions response =  mockMvc.perform(get("/api/v1/person"));
-		
-		//Then /Assert
-		response.andExpect(status().isOk())
-		.andDo(print())
-				.andExpect(jsonPath("$.size()", is(persons.size())));
-	}
-	
-	@DisplayName("Test Given Person Id When Find By Id Should Return Person Object")
-	@Test
-	void testGivenPersonId_WhenFindById_ShouldReturnPersonObject() throws JsonProcessingException, Exception {
-		//Given / Arrange
-		long personId = 1L;
-		when(services.findById(personId)).thenReturn(new PersonDTO(person0));
-		
-		//When / Act
-		ResultActions response =  mockMvc.perform(get("/api/v1/person/{id}", personId));
-		
-		//Then /Assert
-		response.andExpect(status().isOk())
-				.andDo(print())
-				.andExpect(jsonPath("$.first_name", is(person0.getFirstName())))
-				.andExpect(jsonPath("$.last_name", is(person0.getLastName())))
-				.andExpect(jsonPath("$.email", is(person0.getEmail())));
-	}
-	
-	@DisplayName("Test Given Invalid Person Id When Find By Id Should Return Not Found")
-	@Test
-	void testGivenInvalidPersonId_WhenFindById_ShouldWSSdReturnNotFound() throws JsonProcessingException, Exception {
-		//Given / Arrange
-		long personId = 1L;
-		when(services.findById(personId)).thenThrow(ResourceNotFoundException.class);
-		
-		//When / Act
-		ResultActions response =  mockMvc.perform(get("/api/v1/person/{id}", personId));
-		
-		//Then /Assert
-		response.andExpect(status().isNotFound())
-				.andDo(print());
-	}
-	
-	@DisplayName("Test Given Update Person When Update Should Return Updated Person Object")
-	@Test
-	void testGivenUpdatePerson_WhenUpdate_ShouldReturnUpdatedPersonObject() throws JsonProcessingException, Exception {
-		//Given / Arrange
-		long personId = 1L;
-		when(services.findById(personId)).thenReturn(new PersonDTO(person0));
-		when(services.updatePerson(any(PersonDTO.class))).thenAnswer((invocation) -> invocation.getArgument(0));
-		
-		PersonDTO updatedPerson = new PersonDTO(person0);
-		
-		//When / Act
-		ResultActions response =  mockMvc.perform(put("/api/v1/person")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(updatedPerson)));
-		
-		//Then /Assert
-		response.andExpect(status().isOk())
-				.andDo(print())
-				.andExpect(jsonPath("$.first_name", is(updatedPerson.getFirstName())))
-				.andExpect(jsonPath("$.last_name", is(updatedPerson.getLastName())))
-				.andExpect(jsonPath("$.email", is(updatedPerson.getEmail())));
-	}
-	
-	@DisplayName("Test Given Nonexistent Person When Update Should Return Not Found")
-	@Test
-	void testGivenNonexistentPerson_WhenUpdate_ShouldReturnNotFound() throws JsonProcessingException, Exception {
-		
-		//Given / Arrange
-		long personId = 1L;
-		when(services.findById(personId)).thenThrow(ResourceNotFoundException.class);
-		
-		when(services.updatePerson(any(PersonDTO.class))).thenAnswer((invocation) -> invocation.getArgument(1));
-		
-		Person updatedPerson = new Person(1L, "Leonardo", "Costa", "Feira de Santana - BA", "Male", "leonardo@gmail.com");
-		
-		//When / Act
-		ResultActions response =  mockMvc.perform(put("/api/v1/person")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(updatedPerson)));
-		
-		//Then /Assert
+	@BeforeAll
+	public static void setup() {
+		objectMapper = new ObjectMapper();
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-		response.andExpect(status().isNotFound())
-			.andDo(print());
+		personDTO = new PersonDTO();
 	}
-	
-	@DisplayName("Test Given Person Id When Delete Should Return Null Content")
-	@Test
-	void testGivenPersonID_WhenDelete_ShouldReturnNullContent() throws JsonProcessingException, Exception {
-		
-		//Given / Arrange
-		long personId = 1L;
-		willDoNothing().given(services).deletePerson(personId);
-		
-		//When / Act
-		ResultActions response =  mockMvc.perform(delete("/api/v1/person/{id}", personId));
 
-		//Then /Assert
-		response.andExpect(status().isNoContent())
-			.andDo(print());
+	@Test
+	@Order(0)
+	public void authorization() throws IOException {
+		AccountCredentialsDTO user = new AccountCredentialsDTO("leandro", "admin123");
+
+		String accessToken = given()
+				.basePath("/auth/signin")
+				.port(TestConfigs.SERVER_PORT)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.body(user).when().post()
+				.then()
+				.statusCode(200)
+				.extract()
+				.body()
+				.as(TokenDTO.class)
+				.getAccessToken();
+
+		specification = new RequestSpecBuilder()
+				.addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
+				.setBasePath("/api/v1/person")
+				.setPort(TestConfigs.SERVER_PORT)
+				.addFilter(new RequestLoggingFilter(LogDetail.ALL))
+				.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+				.build();
 	}
-	
+
+	@Test
+	@Order(1)
+	public void testCreate() throws IOException {
+
+		mockPerson();
+
+		String content = given().spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.body(personDTO).when().post()
+				.then()
+				.statusCode(201)
+				.extract()
+				.body()
+				.asString();
+
+		PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
+		personDTO = createdPerson;
+		assertNotNull(createdPerson, () -> "Created Person Should not null");
+
+		assertNotNull(createdPerson.getKey(), () -> "Created Person Id Should not null");
+		assertNotNull(createdPerson.getEmail(), () -> "Created Person email Should not null");
+		assertNotNull(createdPerson.getFirstName(), () -> "Created Person first name Should not null");
+
+		assertTrue(createdPerson.getKey() > 0, () ->  "The Person Id should be bigger then 0");
+
+		assertEquals("Stallman", createdPerson.getLastName(), () -> "Created Person last name and Person last name Should be the same!");
+		assertEquals("richard@gmail.com", createdPerson.getEmail(), () -> "Created Person email and Person Email Should  be the same!");
+		assertEquals("Richard", createdPerson.getFirstName(), () -> "Created Person first name and Person first name Should  be the same!");
+	}
+
+	@Test
+	@Order(2)
+	public void testUpdate() throws IOException {
+
+		personDTO.setLastName("Jackson");
+
+		String content = given().spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.body(personDTO).when().put()
+				.then()
+				.statusCode(200)
+				.extract()
+				.body()
+				.asString();
+
+		PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
+		personDTO = createdPerson;
+		assertNotNull(createdPerson, () -> "Update Person Should not null");
+
+		assertEquals(personDTO.getKey(), createdPerson.getKey(), () ->  "The Person Id should the same from created Person");
+
+		assertNotNull(createdPerson.getKey(), () -> "Update Person Id Should not null");
+		assertNotNull(createdPerson.getEmail(), () -> "Update Person email Should not null");
+		assertNotNull(createdPerson.getFirstName(), () -> "Update Person first name Should not null");
+
+		assertEquals("Jackson", createdPerson.getLastName(), () -> "Update Person last name and Person last name Should be the same!");
+		assertEquals("richard@gmail.com", createdPerson.getEmail(), () -> "Update Person email and Person Email Should  be the same!");
+		assertEquals("Richard", createdPerson.getFirstName(), () -> "Update Person first name and Person first name Should  be the same!");
+	}
+
+	@Test
+	@Order(3)
+	public void testFindById() throws IOException {
+
+		mockPerson();
+
+		String content = given().spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
+				.pathParams("id", personDTO.getKey()).when().get("{id}")
+				.then()
+				.statusCode(200)
+				.extract()
+				.body()
+				.asString();
+
+		PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
+		personDTO = createdPerson;
+
+		assertNotNull(createdPerson, () -> "Person Should not null");
+
+
+
+		assertNotNull(createdPerson.getKey(), () -> "Person Id Should not null");
+		assertNotNull(createdPerson.getEmail(), () -> "Person email Should not null");
+		assertNotNull(createdPerson.getFirstName(), () -> "Person first name Should not null");
+
+		assertTrue(createdPerson.getKey() > 0, () ->  "The Person Id should be bigger then 0");
+
+		assertEquals("Jackson", createdPerson.getLastName(), () -> "Person last name and Person last name Should be the same!");
+		assertEquals("richard@gmail.com", createdPerson.getEmail(), () -> "Person email and Person Email Should  be the same!");
+		assertEquals("Richard", createdPerson.getFirstName(), () -> "Person first name and Person first name Should  be the same!");
+	}
+
+	private void mockPerson() {
+		personDTO.setFirstName("Richard");
+		personDTO.setLastName("Stallman");
+		personDTO.setAddress("New York City - USA");
+		personDTO.setGender("Male");
+		personDTO.setEmail("richard@gmail.com");
+	}
 }
