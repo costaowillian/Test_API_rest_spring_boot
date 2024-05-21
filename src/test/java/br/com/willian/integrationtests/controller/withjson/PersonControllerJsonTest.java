@@ -3,6 +3,8 @@ package br.com.willian.integrationtests.controller.withjson;
 import br.com.willian.cnfigs.TestConfigs;
 
 import br.com.willian.dtos.PersonDTO;
+import br.com.willian.dtos.security.AccountCredentialsDTO;
+import br.com.willian.dtos.security.TokenDTO;
 import br.com.willian.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -37,21 +39,40 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 	}
 
 	@Test
+	@Order(0)
+	public void authorization() throws IOException {
+		AccountCredentialsDTO user = new AccountCredentialsDTO("leandro", "admin123");
+
+		String accessToken = given()
+				.basePath("/auth/signin")
+				.port(TestConfigs.SERVER_PORT)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.body(user).when().post()
+				.then()
+				.statusCode(200)
+				.extract()
+				.body()
+				.as(TokenDTO.class)
+				.getAccessToken();
+
+		specification = new RequestSpecBuilder()
+				.addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
+				.setBasePath("/api/v1/person")
+				.setPort(TestConfigs.SERVER_PORT)
+				.addFilter(new RequestLoggingFilter(LogDetail.ALL))
+				.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+				.build();
+	}
+
+	@Test
 	@Order(1)
 	public void testCreate() throws IOException {
 
 		mockPerson();
 
-		specification = new RequestSpecBuilder()
-				.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
-				.setBasePath("/api/v1/person")
-				.setPort(TestConfigs.SERVER_PORT)
-					.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-					.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-				.build();
-
 		String content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
 					.body(personDTO).when().post()
 				.then()
 					.statusCode(201)
@@ -80,16 +101,9 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
 		mockPerson();
 
-		specification = new RequestSpecBuilder()
-				.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_FAIL)
-				.setBasePath("/api/v1/person")
-				.setPort(TestConfigs.SERVER_PORT)
-				.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-				.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-				.build();
-
 		String content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_FAIL)
 				.body(personDTO).when().post()
 				.then()
 				.statusCode(403)
@@ -109,16 +123,9 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
 		mockPerson();
 
-		specification = new RequestSpecBuilder()
-				.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
-				.setBasePath("/api/v1/person")
-				.setPort(TestConfigs.SERVER_PORT)
-				.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-				.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-				.build();
-
 		String content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
 				.pathParams("id", personDTO.getKey()).when().get("{id}")
 				.then()
 				.statusCode(200)
@@ -147,16 +154,9 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
 		mockPerson();
 
-		specification = new RequestSpecBuilder()
-				.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_FAIL)
-				.setBasePath("/api/v1/person")
-				.setPort(TestConfigs.SERVER_PORT)
-				.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-				.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-				.build();
-
 		String content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_FAIL)
 				.pathParams("id", personDTO.getKey()).when().get("{id}")
 				.then()
 				.statusCode(403)
