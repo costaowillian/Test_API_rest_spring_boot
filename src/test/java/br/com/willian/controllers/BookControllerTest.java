@@ -7,6 +7,7 @@ import br.com.willian.integrationtests.dto.PersonDTO;
 import br.com.willian.integrationtests.dto.security.AccountCredentialsDTO;
 import br.com.willian.integrationtests.dto.security.TokenDTO;
 import br.com.willian.integrationtests.testcontainers.AbstractIntegrationTest;
+import br.com.willian.integrationtests.wrappers.WrapperBookDTO;
 import br.com.willian.model.Book;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.common.mapper.TypeRef;
@@ -141,6 +142,7 @@ public class BookControllerTest extends AbstractIntegrationTest {
 
         String content = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .queryParam("page",1, "size", 10, "direction", "asc")
                 .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_SITE)
                 .pathParams("id", booksDTO.getKey()).when().get("{id}")
                 .then()
@@ -180,38 +182,42 @@ public class BookControllerTest extends AbstractIntegrationTest {
     @Order(5)
     public void testFindAll() throws IOException {
 
-        List<BooksDTO> content = given().spec(specification)
+        String content = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .queryParam("page",0, "size", 10, "direction", "asc")
                 .body(booksDTO).when().get()
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(new TypeRef<List<BooksDTO>>() {});
+                .asString();
 
-        BooksDTO findFirstBook = content.getFirst();
+        WrapperBookDTO wrapper = objectMapper.readValue(content, WrapperBookDTO.class);
 
-        assertNotNull(findFirstBook.getKey(), () -> "Book Id Should not null");
-        assertNotNull(findFirstBook.getAuthor(), () -> "Book Author Should not null");
-        assertNotNull(findFirstBook.getPrice(), () -> "Book price Should not null");
+        List<BooksDTO> books = wrapper.getEmbeddedDTO().getBooks();
 
-        assertEquals(1, findFirstBook.getKey(), () ->  "The Person Id should be 1");
+        BooksDTO findBook1 = books.getFirst();
+        assertNotNull(findBook1.getKey(), () -> "Book Id Should not null");
+        assertNotNull(findBook1.getAuthor(), () -> "Book Author Should not null");
+        assertNotNull(findBook1.getPrice(), () -> "Book price Should not null");
 
-        assertEquals("Michael C. Feathers", findFirstBook.getAuthor(), () -> "created Book author and book author Should be the same!");
-        assertEquals(49.00, findFirstBook.getPrice(), () -> "created Book email and Person Email Should  be the same!");
-        assertEquals("Working effectively with legacy code", findFirstBook.getTitle(), () -> "created Book title and book title Should  be the same!");
+        assertEquals(15, findBook1.getKey(), () ->  "The book Id should be 15");
 
-        BooksDTO findBook = content.get(1);
+        assertEquals("Aguinaldo Aragon Fernandes e Vladimir Ferraz de Abreu", findBook1.getAuthor(), () -> "created Book author and book author Should be the same!");
+        assertEquals(54.0, findBook1.getPrice(), () -> "created Book email and Person Email Should  be the same!");
+        assertEquals("Implantando a governança de TI", findBook1.getTitle(), () -> "created Book title and book title Should  be the same!");
+
+        BooksDTO findBook = books.get(1);
 
         assertNotNull(findBook.getKey(), () -> "Book Id Should not null");
         assertNotNull(findBook.getAuthor(), () -> "Book Author Should not null");
         assertNotNull(findBook.getPrice(), () -> "Book price Should not null");
 
-        assertEquals(2, findBook.getKey(), () ->  "The Person Id should be 1");
+        assertEquals(9, findBook.getKey(), () ->  "The book Id should be 9");
 
-        assertEquals("Ralph Johnson, Erich Gamma, John Vlissides e Richard Helm", findBook.getAuthor(), () -> "created Book author and book author Should be the same!");
-        assertEquals(45.00, findBook.getPrice(), () -> "created Book email and Person Email Should  be the same!");
-        assertEquals("Design Patterns", findBook.getTitle(), () -> "created Book title and book title Should  be the same!");
+        assertEquals("Brian Goetz e Tim Peierls", findBook.getAuthor(), () -> "created Book author and book author Should be the same!");
+        assertEquals(80.0, findBook.getPrice(), () -> "created Book email and Person Email Should  be the same!");
+        assertEquals("Java Concurrency in Practice", findBook.getTitle(), () -> "created Book title and book title Should  be the same!");
     }
 
     private void mockBook() {
