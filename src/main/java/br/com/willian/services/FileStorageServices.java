@@ -23,7 +23,9 @@ public class FileStorageServices {
         this.fileStorageLocation = path;
 
         try {
-            Files.createDirectories(this.fileStorageLocation);
+            if (!Files.exists(this.fileStorageLocation)) {
+                Files.createDirectories(this.fileStorageLocation);
+            }
         } catch (Exception e) {
             throw  new FileStorageException("Could not create the directory where the upload files will be storage", e);
         }
