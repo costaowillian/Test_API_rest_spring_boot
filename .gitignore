@@ -11,6 +11,7 @@
 .sts4-cache
 docker-compose.yml
 Dockerfile
+/docker
 
 # Created by https://www.gitignore.io/api/git,java,maven,eclipse,windows
 
