@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.willian</groupId>
-	<artifactId>primeiro_projeto_API</artifactId>
+	<artifactId>primeiro_projeto_api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>primeiro_projeto_API</name>
 	<description>Demo project for Spring Boot</description>

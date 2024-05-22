@@ -1,3 +1,5 @@
+server:
+  port: 80
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000
 file:
@@ -9,7 +11,7 @@ security:
       expire-length: 3600000
 spring:
   application:
-    name: primeiro_projeto_API
+    name: primeiro_projeto_api
 
   profiles:
     active: dev

@@ -1,6 +1,5 @@
 package br.com.willian.controllers;
 
-import br.com.willian.dtos.BooksDTO;
 import br.com.willian.dtos.UploadFileResponseDTO;
 import br.com.willian.services.FileStorageServices;
 import br.com.willian.util.MediaType;
