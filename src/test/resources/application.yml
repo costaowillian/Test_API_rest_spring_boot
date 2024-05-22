@@ -3,7 +3,7 @@ server:
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000
 file:
-  upload-dir: /Users/willian.costa/Documents/Spring/upload-dir
+  upload-dir: /Spring/upload-dir
 security:
   jwt:
     token:
