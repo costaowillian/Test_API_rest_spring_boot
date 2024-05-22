@@ -112,6 +112,25 @@ public class PersonServices {
 		personDto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
 		return personDto;
 	}
+
+	public PagedModel<EntityModel<PersonDTO>> findPersonByName(String firstName, Pageable pageable) throws Exception {
+		logger.info("Finding person by name...");
+
+		Page<Person> personPage = repository.findPersonsByName(firstName, pageable);
+		Page<PersonDTO> personDtoPage = personPage.map(x -> new PersonDTO(x));
+		personDtoPage.forEach(p -> {
+			try {
+				p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+
+		Link link = linkTo(methodOn(PersonController.class).findAll(pageable.getPageNumber(),
+				pageable.getPageSize(), "asc")).withSelfRel();
+
+		return assembler.toModel(personDtoPage, link);
+	}
 	
 	public void deletePerson(Long id) {
 		logger.info("deleting one person...");

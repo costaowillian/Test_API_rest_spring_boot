@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -141,7 +140,37 @@ public class PersonController {
 		PersonDTO obj = service.disablePerson(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
+	@GetMapping(value = "/findPerson/{firstName}",
+			produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Operation(
+			summary = "Finds People by Name",
+			description = "Finds People by Name",
+			tags = {"People"},
+			responses = {
+					@ApiResponse(description = "Success", responseCode = "200",
+							content = {
+									@Content(
+											mediaType = MediaType.APPLICATION_JSON,
+											array = @ArraySchema(schema = @Schema(implementation = PersonDTO.class))
+									)
+							}),
+					@ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+					@ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+					@ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+			})
+	public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findPersonByName(
+			@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "size", defaultValue = "15") Integer size,
+			@RequestParam(value = "direction", defaultValue = "asc") String direction,
+			@PathVariable(value = "firstName") String firstName
+	) throws Exception{
+		var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+		return ResponseEntity.ok().body(service.findPersonByName(firstName, pageable));
+	}
+
 	@DeleteMapping("/{id}")
 	@Operation(
 			summary = "Deletes a Person",
