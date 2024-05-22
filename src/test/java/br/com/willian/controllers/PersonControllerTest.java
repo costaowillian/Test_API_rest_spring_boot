@@ -212,7 +212,7 @@ class PersonControllerTest extends AbstractIntegrationTest {
 
 		String content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
-				.queryParam("page",1, "size", 10, "direction", "asc")
+				.queryParams("page",1, "size", 10, "direction", "asc")
 				.body(personDTO).when().get()
 				.then()
 				.statusCode(200)
@@ -225,28 +225,60 @@ class PersonControllerTest extends AbstractIntegrationTest {
 		var people = wrapper.getEmbeddedDTO().getPersons();
 
 		PersonDTO findFirstPerson = people.getFirst();
-		assertEquals(697, findFirstPerson.getKey(), ()-> "Id should be 697");
+		assertEquals(154, findFirstPerson.getKey(), ()-> "Id should be 154");
 		assertNotNull(findFirstPerson.getKey(), () -> "Person Id Should not null");
 		assertNotNull(findFirstPerson.getEmail(), () -> "Person email Should not null");
 		assertNotNull(findFirstPerson.getFirstName(), () -> "Person first name Should not null");
-		assertFalse(findFirstPerson.isEnabled(), () -> "Person enable Should be true");
+		assertFalse(findFirstPerson.isEnabled(), () -> "Person enable Should be false");
 
 
-		assertEquals("Leiden", findFirstPerson.getLastName(), () -> " find First Person last name and Person last name Should be the same!");
-		assertEquals("aleidenj2@cyberchimps.com", findFirstPerson.getEmail(), () -> " find First Person email and Person Email Should  be the same!");
-		assertEquals("Alessandro", findFirstPerson.getFirstName(), () -> " find First Person first name and Person first name Should  be the same!");
+		assertEquals("Hann", findFirstPerson.getLastName(), () -> " find First Person last name and Person last name Should be the same!");
+		assertEquals("ahann3z@ihg.com", findFirstPerson.getEmail(), () -> " find First Person email and Person Email Should  be the same!");
+		assertEquals("Alasdair", findFirstPerson.getFirstName(), () -> " find First Person first name and Person first name Should  be the same!");
 
 		PersonDTO findPerson = people.get(1);
 
-		assertEquals(872, findPerson.getKey(), ()-> "Id should be 872");
+		assertEquals(283, findPerson.getKey(), ()-> "Id should be 283");
 		assertNotNull(findPerson.getKey(), () -> "Person Id Should not null");
 		assertNotNull(findPerson.getEmail(), () -> "Person email Should not null");
 		assertNotNull(findPerson.getFirstName(), () -> "Person first name Should not null");
-		assertFalse(findPerson.isEnabled(), () -> "Person enable Should be true");
+		assertTrue(findPerson.isEnabled(), () -> "Person enable Should be true");
 
-		assertEquals("Sima", findPerson.getLastName(), () -> " find First Person last name and Person last name Should be the same!");
-		assertEquals("asimanx@1und1.de", findPerson.getEmail(), () -> " find First Person email and Person Email Should  be the same!");
-		assertEquals("Alexia", findPerson.getFirstName(), () -> " find First Person first name and Person first name Should  be the same!");
+		assertEquals("Bloxholm", findPerson.getLastName(), () -> " find First Person last name and Person last name Should be the same!");
+		assertEquals("abloxholm7k@networksolutions.com", findPerson.getEmail(), () -> " find First Person email and Person Email Should  be the same!");
+		assertEquals("Aldric", findPerson.getFirstName(), () -> " find First Person first name and Person first name Should  be the same!");
+	}
+
+	@Test
+	@Order(7)
+	public void testFindByName() throws IOException {
+
+		String content = given().spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.pathParam("firstName", "ayr")
+				.queryParams("page",0, "size", 6, "direction", "asc")
+				.body(personDTO).when().get("/findPerson/{firstName}")
+				.then()
+				.statusCode(200)
+				.extract()
+				.body()
+				.asString();
+
+		WrapperPersonDTO wrapper = objectMapper.readValue(content, WrapperPersonDTO.class);
+
+		var people = wrapper.getEmbeddedDTO().getPersons();
+
+		PersonDTO findFirstPerson = people.getFirst();
+		assertEquals(1, findFirstPerson.getKey(), ()-> "Id should be 1");
+		assertNotNull(findFirstPerson.getKey(), () -> "Person Id Should not null");
+		assertNotNull(findFirstPerson.getEmail(), () -> "Person email Should not null");
+		assertNotNull(findFirstPerson.getFirstName(), () -> "Person first name Should not null");
+		assertTrue(findFirstPerson.isEnabled(), () -> "Person enable Should be true");
+
+
+		assertEquals("Senna", findFirstPerson.getLastName(), () -> " find First Person last name and Person last name Should be the same!");
+		assertEquals("ayrton@gmail.com", findFirstPerson.getEmail(), () -> " find First Person email and Person Email Should  be the same!");
+		assertEquals("Ayrton", findFirstPerson.getFirstName(), () -> " find First Person first name and Person first name Should  be the same!");
 	}
 
 	private void mockPerson() {
