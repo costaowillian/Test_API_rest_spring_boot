@@ -1,5 +1,7 @@
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000
+file:
+  upload-dir: /Users/willian.costa/Documents/Spring/upload-dir
 security:
   jwt:
     token:
@@ -14,3 +16,10 @@ spring:
 
   jpa:
     open-in-view: false
+
+  servlet:
+    multipart:
+      enable: true
+      file-size-threshold: 2kb
+      max-file-size: 200mb
+      max-request-size: 215mb
