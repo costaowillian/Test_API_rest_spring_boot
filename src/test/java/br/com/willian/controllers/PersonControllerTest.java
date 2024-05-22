@@ -8,6 +8,7 @@ import br.com.willian.cnfigs.TestConfigs;
 import br.com.willian.integrationtests.dto.PersonDTO;
 import br.com.willian.integrationtests.dto.security.AccountCredentialsDTO;
 import br.com.willian.integrationtests.dto.security.TokenDTO;
+import br.com.willian.integrationtests.wrappers.WrapperPersonDTO;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.common.mapper.TypeRef;
@@ -209,16 +210,20 @@ class PersonControllerTest extends AbstractIntegrationTest {
 	@Order(6)
 	public void testFindAll() throws IOException {
 
-		List<PersonDTO> content = given().spec(specification)
+		String content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 				.body(personDTO).when().get()
 				.then()
 				.statusCode(200)
 				.extract()
 				.body()
-				.as(new TypeRef<List<PersonDTO>>() {});
+				.asString();
 
-		PersonDTO findFirstPerson = content.getFirst();
+		WrapperPersonDTO wrapper = objectMapper.readValue(content, WrapperPersonDTO.class);
+
+		var people = wrapper.getEmbeddedDTO().getPersons();
+
+		PersonDTO findFirstPerson = people.getFirst();
 
 		assertNotNull(findFirstPerson.getKey(), () -> "Person Id Should not null");
 		assertNotNull(findFirstPerson.getEmail(), () -> "Person email Should not null");
@@ -231,7 +236,7 @@ class PersonControllerTest extends AbstractIntegrationTest {
 		assertEquals("ayrton@gmail.com", findFirstPerson.getEmail(), () -> " find First Person email and Person Email Should  be the same!");
 		assertEquals("Ayrton", findFirstPerson.getFirstName(), () -> " find First Person first name and Person first name Should  be the same!");
 
-		PersonDTO findPerson = content.get(1);
+		PersonDTO findPerson = people.get(1);
 
 		assertNotNull(findPerson.getKey(), () -> "Person Id Should not null");
 		assertNotNull(findPerson.getEmail(), () -> "Person email Should not null");
