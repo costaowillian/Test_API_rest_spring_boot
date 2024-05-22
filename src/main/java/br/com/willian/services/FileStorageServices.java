@@ -2,7 +2,10 @@ package br.com.willian.services;
 
 import br.com.willian.config.FileStorageConfig;
 import br.com.willian.exceptions.FileStorageException;
+import br.com.willian.exceptions.MyFileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +46,20 @@ public class FileStorageServices {
             return fileName;
         } catch (Exception e) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again", e);
+        }
+    }
+
+    public Resource loadFilesAsResource (String fileName) {
+        try {
+            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new MyFileNotFoundException("File not Found " + fileName);
+            }
+        } catch (Exception e) {
+            throw new MyFileNotFoundException("File not Found " + fileName, e);
         }
     }
 }
