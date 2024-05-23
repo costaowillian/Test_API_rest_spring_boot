@@ -4,3 +4,56 @@ max-width: 1180px;
 padding: 0 30px;
 margin: 32px auto;
 }
+
+.book-container h1 {
+    margin-top: 80px;
+    margin-bottom: 24px;
+}
+
+.book-container ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px;
+    list-style: none;
+}
+
+.book-container ul li {
+    flex: 0 0 calc(50% - 12px);
+    max-width: calc(50% - 12px);
+    background: #fff;
+    border-radius: 8px;
+    position: relative;
+    padding: 24px;
+}
+
+.book-container ul li button {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    border: 0;
+    background: transparent;
+    transition: filter 0.5s;
+}
+
+.book-container ul li button + button {
+    top: 50px;
+    margin-top: 16px;
+}
+
+.book-container ul li button:hover {
+    opacity: 0.5;
+}
+
+.book-container ul li strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #41414d;
+}
+
+.book-container ul p {
+    margin-bottom: 16px;
+    color: #737380;
+    line-height: 21px;
+    font-size: 16px;
+}
