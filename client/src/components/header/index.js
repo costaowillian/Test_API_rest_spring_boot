@@ -8,11 +8,13 @@ export default function Header(props) {
 
     const { isNewBook } = props;
 
+    const userName = localStorage.getItem('userName');
+
     return(
         <> 
         <header>
             <Link to="/books" ><img src={ logoImg } alt="logo"></img></Link>
-            <span> Welcome, <strong>Willian</strong>!</span>
+            <span> Welcome, <strong>{userName}</strong>!</span>
             {!isNewBook && <Link className="button" to="/book/new">Add new Book</Link>}
             <button type="button">
                 <FiPower size={18} color="#251fc5" />
