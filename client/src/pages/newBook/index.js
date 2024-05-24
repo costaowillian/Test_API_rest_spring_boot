@@ -5,8 +5,9 @@ import Header from "../../components/header/index";
 export default function NewBook() {
     return (
         <>
-            <Header isNewBook="true" />
+            
             <div className="new-book-container">
+            <Header isNewBook="true" />
                 <section>
                     <h1>Add a new Book</h1>
                     <p>Enter the book information and click on "add"!</p>
@@ -14,7 +15,7 @@ export default function NewBook() {
                         <input type="text" placeholder="Titlte"></input>
                         <input type="text" placeholder="Author"></input>
 
-                        <div>
+                        <div className="input-division">
                             <input type="number" placeholder="Price"></input>
                             <input type="date" placeholder="Titlte"></input>
                         </div>

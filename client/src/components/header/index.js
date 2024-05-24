@@ -11,9 +11,9 @@ export default function Header(props) {
     return(
         <> 
         <header>
-            <img src={ logoImg } alt="logo"></img>
+            <Link to="/books" ><img src={ logoImg } alt="logo"></img></Link>
             <span> Welcome, <strong>Willian</strong>!</span>
-            {!isNewBook && <Link className="button" to="/new-book">Add new Book</Link>}
+            {!isNewBook && <Link className="button" to="/book/new">Add new Book</Link>}
             <button type="button">
                 <FiPower size={18} color="#251fc5" />
             </button> 
