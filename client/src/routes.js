@@ -13,7 +13,8 @@ export default function Router() {
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/books" element={<Books />} />
-                    <Route path="/book/new" element={<NewBook />} />
+                    <Route path="/book/new/:bookId" element={<NewBook />} />
+                    <Route path="/books/book/new/:bookId" element={<NewBook />} />
                 </Routes>
             </Suspense>
         </BrowserRouter>

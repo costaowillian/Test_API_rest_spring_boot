@@ -24,7 +24,7 @@ export default function Header(props) {
         <header>
             <Link to="/books" ><img src={ logoImg } alt="logo"></img></Link>
             <span> Welcome, <strong>{userName}</strong>!</span>
-            {!isNewBook && <Link className="button" to="/book/new">Add new Book</Link>}
+            {!isNewBook && <Link className="button" to="/book/new/0">Add new Book</Link>}
             <button type="button" onClick={logout}>
                 <FiPower size={18} color="#251fc5" />
             </button> 

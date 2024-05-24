@@ -28,6 +28,14 @@ export default function Book() {
         })
     }, []);
 
+    const editBook = async(id) => {
+        try {
+            navigate(`book/new/${id}`);
+        } catch(error) {
+            alert("Edit failed! Try again!");
+        }
+    }
+
     const deleteBook = async(id) => {
         try {
            await api.delete(`/api/v1/books/${id}`, {headers: {
@@ -60,10 +68,10 @@ export default function Book() {
                                 <strong>Release Date:</strong>
                                 <p>{Intl.DateTimeFormat('pt-BR').format(new Date(book.release_date))}</p>
 
-                                <button type="button" onClick={() => deleteBook(book.id)}>
+                                <button type="button" onClick={() => editBook(book.id)}>
                                     <FiEdit size={20} color="#251fc5" />
                                 </button>
-                                <button type="button">
+                                <button type="button" onClick={() => deleteBook(book.id)}>
                                     <FiTrash2 size={20} color="#251fc5" />
                                 </button>
                             </li>))) 
