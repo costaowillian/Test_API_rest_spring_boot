@@ -7,25 +7,34 @@ import api from '../../services/api';
 
 export default function Book() {
     
-    const navigate = useNavigate([]); 
+    const navigate = useNavigate(); 
     
-    const [books, setBooks] = useState();
+    const [books, setBooks] = useState([]);
+    const [page, setPage] = useState(0);
 
     const accessToken = localStorage.getItem('accessToken');
     
-    useEffect(() => {
-        api.get("/api/v1/books", {
+    const fetchMoreBooks = async () => {
+        const response = await api.get("/api/v1/books", {
             headers: {
                 'authorization': `Bearer ${accessToken}`
             }, 
             params: {
-                'page': 0,
+                'page': page,
                 'size': 4,
                 'direction': 'asc'
             }
-        }).then(response => {
-            setBooks(response.data._embedded.booksDTOList);
-        })
+        });
+        if (response.data._embedded != null) {
+            setBooks([...books, ...response.data._embedded.booksDTOList]);
+            setPage(page + 1);
+        } else{
+            alert("All books have already been loaded");
+        }
+    }
+
+    useEffect(() => {
+        fetchMoreBooks();
     }, []);
 
     const editBook = async(id) => {
@@ -80,6 +89,7 @@ export default function Book() {
                         )
                     }
                 </ul>
+                <button className="button" onClick={fetchMoreBooks} type="button">Load more</button>
             </div>
         </>
     )
